@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace GestorAlquilerApi.Migrations
+namespace GestorAlquilerApi.DataAccessLayer.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

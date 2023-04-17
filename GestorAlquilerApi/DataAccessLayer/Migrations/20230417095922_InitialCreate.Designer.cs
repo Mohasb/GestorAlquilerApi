@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GestorAlquilerApi.Migrations
+namespace GestorAlquilerApi.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230417075445_InitialCreate")]
+    [Migration("20230417095922_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

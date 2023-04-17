@@ -118,6 +118,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             _repository.Remove(car);
+            //Delete car from availables planning
+            RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
             await _repository.SaveChangesAsync();
 
             return NoContent();
@@ -136,6 +138,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             foreach (var plan in planning)
             {
                 plan.CarsAvailables++;
+            }
+            await _repository.SaveChangesAsync();
+        }
+        private async void RemoveCarFromAvaildables(CarDTO carDTO)
+        {
+            var planning = _repository.GetDataPlanning(carDTO);
+            foreach (var plan in planning)
+            {
+                plan.CarsAvailables--;
             }
             await _repository.SaveChangesAsync();
         }
