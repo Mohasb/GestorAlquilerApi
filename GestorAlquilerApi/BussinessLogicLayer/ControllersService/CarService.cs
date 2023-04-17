@@ -94,6 +94,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return Problem("Entity set 'ApiContext.Car'  is null.");
             }
+            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
+
+            if (!valuesAsArray.Contains(car.Category))
+            {
+                return Problem(
+                    $"Category '{car.Category}' is invalid. It has to be in: '{string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[valuesAsArray.Length - 1]}'"
+                );
+            }
 
             _repository.AddCar(car);
 
@@ -141,6 +149,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             await _repository.SaveChangesAsync();
         }
+
         private async void RemoveCarFromAvaildables(CarDTO carDTO)
         {
             var planning = _repository.GetDataPlanning(carDTO);

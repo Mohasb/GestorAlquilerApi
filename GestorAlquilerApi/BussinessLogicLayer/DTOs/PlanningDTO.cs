@@ -5,7 +5,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
     public class PlanningDTO
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         [Required(ErrorMessage = "The field 'Id' is required")]
         public int Id { get; set; }
         public string? Day { get; set; }

@@ -15,7 +15,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 
     public class CarDTO
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         [Required(ErrorMessage = "The field 'Id' is required")]
         public int Id { get; set; }
 
