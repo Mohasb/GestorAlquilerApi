@@ -7,5 +7,5 @@ EndPoitn: reservas por cliente
 //TODO:cambio nombres llamada controlador------------------------------------------------------->   OK
 Ojo con los return de los   SERVICIOS quiter ActionResult. RETORNAR MEJOR LISTAS CON COSAS
 generics c#. uSAR EN INTERFACES Y QUERYS
-
+//Hacer una clase para reornar de los servicios ??(bien, Mal, datos)
 sqllocaldb
