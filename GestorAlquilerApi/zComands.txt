@@ -2,3 +2,4 @@ dotnet ef migrations add InitialCreate -o .\DataAccessLayer\Migrations
 dotnet ef database update
 dotnet watch
 Cambio de campo principal a la calve unique
+//TODO:arreglar fecha unica en obtener coches disponibles !consultas
