@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _reservations = _repository.GetDataReservation();
         }
 
-        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservation()
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllReservations()
         {
             if (_reservations == null)
             {
@@ -36,7 +36,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await reservations.ToListAsync();
         }
 
-        public async Task<ActionResult<ReservationDTO>> GetReservation(int id)
+        public async Task<ActionResult<ReservationDTO>> GetReservationById(int id)
         {
             if (_reservations == null)
             {
@@ -53,7 +53,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return reservationDTO;
         }
 
-        public async Task<IActionResult> PutReservation(int id, ReservationDTO reservationDTO)
+        public async Task<IActionResult> EditReservation(int id, ReservationDTO reservationDTO)
         {
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
@@ -83,7 +83,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<ReservationDTO>> PostReservation(
+        public async Task<ActionResult<ReservationDTO>> AddReservationSameBranch(
             ReservationDTO reservationDTO
         )
         {
@@ -102,7 +102,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
         }
 
-        public async Task<IActionResult> DeleteReservation(int id)
+        public async Task<IActionResult> RemoveReservation(int id)
         {
             if (_reservations == null)
             {

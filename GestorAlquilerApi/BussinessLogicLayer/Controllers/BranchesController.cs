@@ -20,30 +20,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch() =>
-            await _branchService.GetBranch();
+            await _branchService.GetAllBranches();
 
         // GET: api/Branches/{id}
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<BranchDTO>> GetBranch(int id) =>
-            await _branchService.GetBranch(id);
+            await _branchService.GetBranchById(id);
 
         // PUT: api/Branches/{id}
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO) =>
-            await _branchService.PutBranch(id, branchDTO);
+            await _branchService.EditBranch(id, branchDTO);
 
         // POST: api/Branches
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO) =>
-            await _branchService.PostBranch(branchDTO);
+            await _branchService.AddBranch(branchDTO);
 
         // DELETE: api/Branches/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBranch(int id) =>
-            await _branchService.DeleteBranch(id);
+            await _branchService.RemoveBranch(id);
     }
 }

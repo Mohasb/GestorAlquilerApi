@@ -17,8 +17,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpPut("{email}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutClient(string email) =>
-            await _setUserAdminService.PutClient(email);
+            await _setUserAdminService.EditClient(email);
 
-        private bool ClientExists(int id) => _setUserAdminService.ClientExists(id);
+        private bool ClientExists(int id) => _setUserAdminService.CheckClientExists(id);
     }
 }

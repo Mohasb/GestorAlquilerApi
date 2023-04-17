@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _cars = _repository.GetDataCars();
         }
 
-        public async Task<ActionResult<IEnumerable<CarDTO>>> GetCars()
+        public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllCars()
         {
             if (_cars == null)
             {
@@ -37,7 +37,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await cars.ToListAsync();
         }
 
-        public async Task<ActionResult<CarDTO>> GetCar(int id)
+        public async Task<ActionResult<CarDTO>> GetCarById(int id)
         {
             if (_cars == null)
             {
@@ -55,7 +55,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return carDTO;
         }
 
-        public async Task<IActionResult> PutCar(int id, CarDTO carDTO)
+        public async Task<IActionResult> EditCar(int id, CarDTO carDTO)
         {
             var car = _mapper.Map<Car>(carDTO);
             car.Id = id;
@@ -86,7 +86,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<CarDTO>> PostCar(CarDTO carDTO)
+        public async Task<ActionResult<CarDTO>> AddCar(CarDTO carDTO)
         {
             var car = _mapper.Map<Car>(carDTO);
 
@@ -113,7 +113,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
 
-        public async Task<IActionResult> DeleteCar(int id)
+        public async Task<IActionResult> RemoveCar(int id)
         {
             if (_cars == null)
             {

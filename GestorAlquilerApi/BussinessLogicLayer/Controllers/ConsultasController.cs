@@ -19,14 +19,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         // GET: api/Branches
         [HttpGet("carsByBranchId")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranchId(
-            int id
-        ) => await _consultasService.GetCarsByBranchId(id);
+        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> Get(int id) =>
+            await _consultasService.GetCarsByBranchId(id);
 
         // GET: api/Branches
         [HttpGet("carsAvailablesByDate/{date}/{branchId}/{carCategory}")]
         //[Authorize]
-        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranch(
+        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetByIdBranch(
             DateTime date,
             int branchId,
             string carCategory

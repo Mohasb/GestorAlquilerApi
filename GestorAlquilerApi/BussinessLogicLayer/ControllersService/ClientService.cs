@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _clients = _repository.GetDataClients();
         }
 
-        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetClients()
+        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAllClients()
         {
             if (_clients == null)
             {
@@ -39,7 +39,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await clients.ToListAsync();
         }
 
-        public async Task<ActionResult<ClientDTO>> GetClient(int id)
+        public async Task<ActionResult<ClientDTO>> GetClientById(int id)
         {
             if (_clients == null)
             {
@@ -56,7 +56,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return clientDto;
         }
 
-        public async Task<IActionResult> PutClient(int id, ClientDTO clientDTO)
+        public async Task<IActionResult> EditClient(int id, ClientDTO clientDTO)
         {
             var client = _mapper.Map<Client>(clientDTO);
             client.Id = id;
@@ -86,7 +86,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO)
+        public async Task<ActionResult<ClientDTO>> AddClient(ClientDTO clientDTO)
         {
             clientDTO.Password = BCrypt.Net.BCrypt.HashPassword(clientDTO.Password);
 
@@ -104,7 +104,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
 
-        public async Task<IActionResult> DeleteClient(int id)
+        public async Task<IActionResult> RemoveClient(int id)
         {
             if (_clients == null)
             {

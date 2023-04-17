@@ -5,10 +5,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface IReservationService
     {
-        Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservation();
-        Task<ActionResult<ReservationDTO>> GetReservation(int id);
-        Task<IActionResult> PutReservation(int id, ReservationDTO reservationDTO);
-        Task<ActionResult<ReservationDTO>> PostReservation(ReservationDTO reservationDTO);
-        Task<IActionResult> DeleteReservation(int id);
+        Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllReservations();
+        Task<ActionResult<ReservationDTO>> GetReservationById(int id);
+        Task<IActionResult> EditReservation(int id, ReservationDTO reservationDTO);
+        Task<ActionResult<ReservationDTO>> AddReservationSameBranch(ReservationDTO reservationDTO);
+        Task<IActionResult> RemoveReservation(int id);
     }
 }

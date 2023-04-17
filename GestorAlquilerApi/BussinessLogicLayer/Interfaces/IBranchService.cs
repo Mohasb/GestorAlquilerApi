@@ -5,10 +5,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface IBranchService
     {
-        Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch();
-        Task<ActionResult<BranchDTO>> GetBranch(int id);
-        Task<IActionResult> PutBranch(int id, BranchDTO branchDTO);
-        Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO);
-        Task<IActionResult> DeleteBranch(int id);
+        Task<ActionResult<IEnumerable<BranchDTO>>> GetAllBranches();
+        Task<ActionResult<BranchDTO>> GetBranchById(int id);
+        Task<IActionResult> EditBranch(int id, BranchDTO branchDTO);
+        Task<ActionResult<BranchDTO>> AddBranch(BranchDTO branchDTO);
+        Task<IActionResult> RemoveBranch(int id);
     }
 }

@@ -19,30 +19,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ClientDTO>>> GetClient() =>
-            await _clientService.GetClients();
+            await _clientService.GetAllClients();
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ClientDTO>> GetClient(int id) =>
-            await _clientService.GetClient(id);
+            await _clientService.GetClientById(id);
 
         // PUT: api/Clients/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutClient(int id, ClientDTO clientDTO) =>
-            await _clientService.PutClient(id, clientDTO);
+            await _clientService.EditClient(id, clientDTO);
 
         // POST: api/Clients
         [HttpPost]
         /*[Authorize(Roles = "Admin")]*/
         public async Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO) =>
-            await _clientService.PostClient(clientDTO);
+            await _clientService.AddClient(clientDTO);
 
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteClient(int id) =>
-            await _clientService.DeleteClient(id);
+            await _clientService.RemoveClient(id);
     }
 }

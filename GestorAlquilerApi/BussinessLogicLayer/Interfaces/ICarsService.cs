@@ -5,10 +5,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface ICarsService
     {
-        Task<ActionResult<IEnumerable<CarDTO>>> GetCars();
-        Task<ActionResult<CarDTO>> GetCar(int id);
-        Task<IActionResult> PutCar(int id, CarDTO carDTO);
-        Task<ActionResult<CarDTO>> PostCar(CarDTO carDTO);
-        Task<IActionResult> DeleteCar(int id);
+        Task<ActionResult<IEnumerable<CarDTO>>> GetAllCars();
+        Task<ActionResult<CarDTO>> GetCarById(int id);
+        Task<IActionResult> EditCar(int id, CarDTO carDTO);
+        Task<ActionResult<CarDTO>> AddCar(CarDTO carDTO);
+        Task<IActionResult> RemoveCar(int id);
     }
 }

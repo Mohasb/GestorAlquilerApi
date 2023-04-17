@@ -5,11 +5,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface IClientService
     {
-        Task<ActionResult<IEnumerable<ClientDTO>>> GetClients();
-        Task<ActionResult<ClientDTO>> GetClient(int id);
-        Task<IActionResult> PutClient(int id, ClientDTO clientDTO);
-        Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO);
-        Task<IActionResult> DeleteClient(int id);
+        Task<ActionResult<IEnumerable<ClientDTO>>> GetAllClients();
+        Task<ActionResult<ClientDTO>> GetClientById(int id);
+        Task<IActionResult> EditClient(int id, ClientDTO clientDTO);
+        Task<ActionResult<ClientDTO>> AddClient(ClientDTO clientDTO);
+        Task<IActionResult> RemoveClient(int id);
         ClientDTO? AuthenticateUser(UserDTO user);
     }
 }

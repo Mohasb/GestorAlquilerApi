@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _branches = _repository.GetDataBranches();
         }
 
-        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch()
+        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllBranches()
         {
             if (_branches == null)
             {
@@ -39,7 +39,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await branchesDTO.ToListAsync();
         }
 
-        public async Task<ActionResult<BranchDTO>> GetBranch(int id)
+        public async Task<ActionResult<BranchDTO>> GetBranchById(int id)
         {
             if (_branches == null)
             {
@@ -57,7 +57,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return branchDTO;
         }
 
-        public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO)
+        public async Task<IActionResult> EditBranch(int id, BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
             branch.Id = id;
@@ -88,7 +88,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO)
+        public async Task<ActionResult<BranchDTO>> AddBranch(BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
 
@@ -106,7 +106,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
         }
 
-        public async Task<IActionResult> DeleteBranch(int id)
+        public async Task<IActionResult> RemoveBranch(int id)
         {
             if (_branches == null)
             {

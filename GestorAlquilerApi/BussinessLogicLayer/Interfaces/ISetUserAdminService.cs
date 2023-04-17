@@ -4,7 +4,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface ISetUserAdminService
     {
-        Task<IActionResult> PutClient(string email);
-        bool ClientExists(int id);
+        Task<IActionResult> EditClient(string email);
+        bool CheckClientExists(int id);
     }
 }

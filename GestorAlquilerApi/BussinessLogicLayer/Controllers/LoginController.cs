@@ -23,7 +23,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
             _clientService = clientService;
         }
 
-        private ClientDTO? AuthenticateUser(UserDTO user) => _clientService.AuthenticateUser(user);
+        private ClientDTO? CheckUserEmailPassword(UserDTO user) => _clientService.AuthenticateUser(user);
 
         private string GenerateToken(ClientDTO user)
         {
@@ -54,7 +54,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         public IActionResult Login(UserDTO user)
         {
             IActionResult response = Unauthorized();
-            var _user = AuthenticateUser(user);
+            var _user = CheckUserEmailPassword(user);
 
             if (_user != null)
             {

@@ -20,30 +20,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetPlanning() =>
-            await _planningService.GetPlanning();
+            await _planningService.GetAllPlanning();
 
         // GET: api/Planning/5
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<PlanningDTO>> GetPlanning(int id) =>
-            await _planningService.GetPlanning(id);
+            await _planningService.GetPlanningById(id);
 
         // PUT: api/Planning/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutPlanning(int id, PlanningDTO planningDTO) =>
-            await _planningService.PutPlanning(id, planningDTO);
+            await _planningService.EditPlanning(id, planningDTO);
 
         // POST: api/Planning
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Planning>> PostPlanning(PlanningDTO planningDTO) =>
-            await _planningService.PostPlanning(planningDTO);
+            await _planningService.AddPlanning(planningDTO);
 
         // DELETE: api/Planning/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlanning(int id) =>
-            await _planningService.DeletePlanning(id);
+            await _planningService.RemovePlanning(id);
     }
 }

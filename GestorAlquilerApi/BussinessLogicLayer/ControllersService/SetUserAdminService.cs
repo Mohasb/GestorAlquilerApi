@@ -17,7 +17,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _users = _repository.GetDataClients();
         }
 
-        public async Task<IActionResult> PutClient(string email)
+        public async Task<IActionResult> EditClient(string email)
         {
             var client = _users.FirstOrDefault(x => x.Email == email);
 
@@ -35,7 +35,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClientExists(client.Id))
+                if (!CheckClientExists(client.Id))
                 {
                     return NotFound();
                 }
@@ -46,7 +46,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
         }
 
-        public bool ClientExists(int id)
+        public bool CheckClientExists(int id)
         {
             return (_users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
