@@ -12,10 +12,9 @@ using GestorAlquilerApi.DataAccessLayer.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 
+//////////// Add services to the container.//////////////////
 
-
-
-
+//Dependency injection(When a class is added a Interface -> add object of the class that implements the interface)
 builder.Services.AddScoped<IBranchService, BranchesServices>();
 builder.Services.AddScoped<IQueryBranch, BranchQueries>();
 
@@ -36,21 +35,15 @@ builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>();
 
 builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
 
-
-
-
-
-
-
-
-
-// Add services to the container.
+//AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+//DBContext
 builder.Services.AddDbContext<ApiContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ApiContext") ?? throw new InvalidOperationException("Connection string 'ApiContext' not found.")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen( options => 
 {
@@ -60,6 +53,7 @@ builder.Services.AddSwaggerGen( options =>
         Title = "Api Gestion De Alquileres",
         Description = "An ASP.NET Core Web API to carry out the management of branches, cars, clients and reservations in a car rental company"
     });  
+    //Add Security JWT to swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
     In = ParameterLocation.Header, 
     Description = "Please insert JWT with Bearer into field",
@@ -81,6 +75,7 @@ builder.Services.AddSwaggerGen( options =>
   }); 
 });
 
+//JWT Especifications
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => 
 {
