@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 
@@ -10,9 +6,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
     public class ApiContext : DbContext
     {
         public ApiContext(DbContextOptions<ApiContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public DbSet<Planning> Planning { get; set; } = default!;
 
@@ -24,7 +18,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
 
         public DbSet<Reservation> Reservation { get; set; } = default!;
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Branch>().HasIndex(b => b.Cif).IsUnique();
@@ -32,6 +25,5 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
             modelBuilder.Entity<Client>().HasIndex(c => c.Registration).IsUnique();
             modelBuilder.Entity<Client>().HasIndex(c => c.Email).IsUnique();
         }
-
     }
 }

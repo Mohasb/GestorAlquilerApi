@@ -21,7 +21,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
             //
             CreateMap<Planning, PlanningDTO>();
             CreateMap<PlanningDTO, Planning>();
-
         }
     }
 }

@@ -16,12 +16,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public PlanningService(IQueryPlanning repository, IMapper mapper)
         {
-
             _repository = repository;
             _mapper = mapper;
             _planning = _repository.GetDataPlanning();
-
         }
+
         public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetPlanning()
         {
             if (_planning == null)
@@ -31,6 +30,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             var planning = _planning.Select(p => _mapper.Map<PlanningDTO>(p));
             return await planning.ToListAsync();
         }
+
         public async Task<ActionResult<PlanningDTO>> GetPlanning(int id)
         {
             if (_planning == null)
@@ -47,9 +47,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return planningDTO;
         }
+
         public async Task<IActionResult> PutPlanning(int id, PlanningDTO planningDTO)
         {
-
             var planning = _mapper.Map<Planning>(planningDTO);
 
             if (id != planning.Id)
@@ -77,6 +77,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         public async Task<ActionResult<Planning>> PostPlanning(PlanningDTO planningDTO)
         {
             if (_planning == null)
@@ -91,6 +92,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return CreatedAtAction("GetPlanning", new { id = planning.Id }, planning);
         }
+
         public async Task<IActionResult> DeletePlanning(int id)
         {
             if (_planning == null)
@@ -108,6 +110,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         private bool PlanningExists(int id)
         {
             return (_planning?.Any(e => e.Id == id)).GetValueOrDefault();

@@ -8,41 +8,25 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
     public class BranchQueries : IQueryBranch
     {
         private readonly ApiContext _context;
+
         public BranchQueries(ApiContext context)
         {
             _context = context;
         }
-        public DbSet<Branch> GetDataBranches()
-        {
-            return _context.Branch;
-        }
-        public DbSet<Planning> GetDataPlanning()
-        {
-            return _context.Planning;
-        }
 
-        public void ModifiedState(Branch branch)
-        {
-             _context.Entry(branch).State = EntityState.Modified;
-        }
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+        public DbSet<Branch> GetDataBranches() => _context.Branch;
 
-        public void AddBranch(Branch branch)
-        {
-            _context.Add(branch);
-        }
-        public void Remove(Branch branch)
-        {
-            _context.Remove(branch);
-        }
+        public DbSet<Planning> GetDataPlanning() => _context.Planning;
 
+        public void ModifiedState(Branch branch) =>
+            _context.Entry(branch).State = EntityState.Modified;
 
-        public void AddPlanning(Planning planning)
-        {
-            _context.Add(planning);
-        }
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+
+        public void AddBranch(Branch branch) => _context.Add(branch);
+
+        public void Remove(Branch branch) => _context.Remove(branch);
+
+        public void AddPlanning(Planning planning) => _context.Add(planning);
     }
 }

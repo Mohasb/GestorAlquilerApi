@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-namespace GestorAlquilerApi.BussinessLogicLayer.Models
+﻿namespace GestorAlquilerApi.BussinessLogicLayer.Models
 {
     public class Client
     {

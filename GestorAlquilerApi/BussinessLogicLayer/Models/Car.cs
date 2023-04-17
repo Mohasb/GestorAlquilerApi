@@ -4,8 +4,12 @@
     {
         public enum Categories
         {
-            A, B, C, D
+            A,
+            B,
+            C,
+            D
         }
+
         public int Id { get; set; }
         public string? Registration { get; set; }
         public string? Brand { get; set; }

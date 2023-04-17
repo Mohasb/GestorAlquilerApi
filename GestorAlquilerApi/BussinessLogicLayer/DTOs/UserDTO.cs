@@ -1,6 +1,3 @@
-using System;
-using System.Text.Json.Serialization;
-
 namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
     public class UserDTO

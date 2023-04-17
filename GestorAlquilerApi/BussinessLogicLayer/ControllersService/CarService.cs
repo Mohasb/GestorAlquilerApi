@@ -28,14 +28,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return NotFound();
             }
 
-            if (!Convert.ToBoolean(_cars.Count())) return NotFound("There are no Cars");
+            if (!Convert.ToBoolean(_cars.Count()))
+                return NotFound("There are no Cars");
 
             var data = _cars;
             var cars = data.Select(c => _mapper.Map<CarDTO>(c));
 
             return await cars.ToListAsync();
-
         }
+
         public async Task<ActionResult<CarDTO>> GetCar(int id)
         {
             if (_cars == null)
@@ -53,6 +54,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return carDTO;
         }
+
         public async Task<IActionResult> PutCar(int id, CarDTO carDTO)
         {
             var car = _mapper.Map<Car>(carDTO);
@@ -83,9 +85,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         public async Task<ActionResult<CarDTO>> PostCar(CarDTO carDTO)
         {
-
             var car = _mapper.Map<Car>(carDTO);
 
             if (_cars == null)
@@ -97,11 +99,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             await _repository.SaveChangesAsync();
 
-            //Here is addedd a this car to availables in planning 
+            //Here is addedd a this car to availables in planning
             AddCarToAvaildables(carDTO);
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
+
         public async Task<IActionResult> DeleteCar(int id)
         {
             if (_cars == null)
@@ -119,14 +122,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
-
-
-
-
-
-
-
-
 
         /////////////////////////////////////////////HELPERS///////////////////////////////////
         private bool CarExists(int id)

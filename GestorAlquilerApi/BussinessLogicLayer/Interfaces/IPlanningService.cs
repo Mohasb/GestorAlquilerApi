@@ -11,6 +11,5 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
         Task<IActionResult> PutPlanning(int id, PlanningDTO planningDTO);
         Task<ActionResult<Planning>> PostPlanning(PlanningDTO planningDTO);
         Task<IActionResult> DeletePlanning(int id);
-
     }
 }

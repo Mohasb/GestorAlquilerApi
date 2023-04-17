@@ -21,7 +21,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly DbSet<Reservation> _reservations;
         private readonly DbSet<Planning> _planning;
 
-        public ConsultasService(IMapper mapper, IQueryConsultas repository, IQueryBranch branchRepository, IQueryCar carsRepository, IQueryReservation reservationsRepository, IQueryPlanning planningRepository)
+        public ConsultasService(
+            IMapper mapper,
+            IQueryConsultas repository,
+            IQueryBranch branchRepository,
+            IQueryCar carsRepository,
+            IQueryReservation reservationsRepository,
+            IQueryPlanning planningRepository
+        )
         {
             _repository = repository;
             _mapper = mapper;
@@ -34,8 +41,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _cars = carsRepository.GetDataCars();
             _reservations = reservationsRepository.GetDataReservation();
             _planning = planningRepository.GetDataPlanning();
-
         }
+
         public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranchId(int id)
         {
             if (_branches == null || _cars == null)
@@ -46,17 +53,21 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             var countCars = _cars.Count();
             var countBranches = _branches.Count();
 
-            if (!Convert.ToBoolean(countBranches)) return Problem("Theres no Branches", statusCode: 404);
-            if (!Convert.ToBoolean(countCars)) return Problem("Theres no Cars", statusCode: 404);
-
+            if (!Convert.ToBoolean(countBranches))
+                return Problem("Theres no Branches", statusCode: 404);
+            if (!Convert.ToBoolean(countCars))
+                return Problem("Theres no Cars", statusCode: 404);
 
             var cars = _repository.GetCarsByBranchId(id, _cars, _branches);
 
-
-
             return Ok(await cars.ToListAsync());
         }
-        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranch(DateTime date, int branchId, string carCategory)
+
+        public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranch(
+            DateTime date,
+            int branchId,
+            string carCategory
+        )
         {
             if (_reservations == null || _branches == null || _cars == null)
             {
@@ -66,7 +77,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             var data = _repository.GetPlanningCars(_planning, date, branchId, carCategory);
 
             return Ok(await data.ToListAsync());
-
         }
     }
 }

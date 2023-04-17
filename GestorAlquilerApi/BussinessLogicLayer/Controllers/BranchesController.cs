@@ -7,7 +7,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BranchesController 
+    public class BranchesController
     {
         private readonly IBranchService _branchService;
 
@@ -15,35 +15,35 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         {
             _branchService = branchService;
         }
+
         // GET: api/Branches
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch()
-           => await _branchService.GetBranch();
+        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch() =>
+            await _branchService.GetBranch();
 
         // GET: api/Branches/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<BranchDTO>> GetBranch(int  id)
-           => await _branchService.GetBranch(id);
-        
+        public async Task<ActionResult<BranchDTO>> GetBranch(int id) =>
+            await _branchService.GetBranch(id);
 
         // PUT: api/Branches/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO)
-            => await _branchService.PutBranch(id, branchDTO);
+        public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO) =>
+            await _branchService.PutBranch(id, branchDTO);
 
         // POST: api/Branches
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO)
-            => await _branchService.PostBranch(branchDTO);
+        public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO) =>
+            await _branchService.PostBranch(branchDTO);
 
         // DELETE: api/Branches/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteBranch(int id)
-        => await _branchService.DeleteBranch(id);
+        public async Task<IActionResult> DeleteBranch(int id) =>
+            await _branchService.DeleteBranch(id);
     }
 }

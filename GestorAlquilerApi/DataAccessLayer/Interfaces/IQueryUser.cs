@@ -1,4 +1,3 @@
-
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 
 namespace GestorAlquilerApi.DataAccessLayer.Interfaces

@@ -2,3 +2,4 @@ dotnet ef migrations add InitialCreate -o .\DataAccessLayer\
 dotnet ef database update
 dotnet watch
 Cambio de campo principal a la calve unique
+Delete car no elimina de planning

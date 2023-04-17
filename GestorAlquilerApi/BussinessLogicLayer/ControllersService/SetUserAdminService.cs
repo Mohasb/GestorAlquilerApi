@@ -1,5 +1,3 @@
-using System;
-using AutoMapper;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -18,6 +16,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _repository = repository;
             _users = _repository.GetDataClients();
         }
+
         public async Task<IActionResult> PutClient(string email)
         {
             var client = _users.FirstOrDefault(x => x.Email == email);
@@ -46,10 +45,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
         }
+
         public bool ClientExists(int id)
         {
             return (_users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
     }
 }

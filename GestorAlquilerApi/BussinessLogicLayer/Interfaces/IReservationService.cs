@@ -10,6 +10,5 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
         Task<IActionResult> PutReservation(int id, ReservationDTO reservationDTO);
         Task<ActionResult<ReservationDTO>> PostReservation(ReservationDTO reservationDTO);
         Task<IActionResult> DeleteReservation(int id);
-
     }
 }

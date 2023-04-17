@@ -10,6 +10,5 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
         Task<IActionResult> PutCar(int id, CarDTO carDTO);
         Task<ActionResult<CarDTO>> PostCar(CarDTO carDTO);
         Task<IActionResult> DeleteCar(int id);
-
     }
 }

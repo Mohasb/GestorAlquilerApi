@@ -10,12 +10,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
     public class ClientService : ControllerBase, IClientService
     {
-
-
         private readonly IQueryClient _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Client> _clients;
-
 
         public ClientService(IQueryClient repository, IMapper mapper)
         {
@@ -23,7 +20,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _mapper = mapper;
             _clients = _repository.GetDataClients();
         }
-
 
         public async Task<ActionResult<IEnumerable<ClientDTO>>> GetClients()
         {
@@ -34,14 +30,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var countClients = (from c in _clients select c).Count();
 
-            if (!Convert.ToBoolean(countClients)) return NotFound("There are no Clients");
-
+            if (!Convert.ToBoolean(countClients))
+                return NotFound("There are no Clients");
 
             var data = _clients;
             var clients = data.Select(c => _mapper.Map<ClientDTO>(c));
 
             return await clients.ToListAsync();
         }
+
         public async Task<ActionResult<ClientDTO>> GetClient(int id)
         {
             if (_clients == null)
@@ -58,6 +55,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return clientDto;
         }
+
         public async Task<IActionResult> PutClient(int id, ClientDTO clientDTO)
         {
             var client = _mapper.Map<Client>(clientDTO);
@@ -87,6 +85,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         public async Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO)
         {
             clientDTO.Password = BCrypt.Net.BCrypt.HashPassword(clientDTO.Password);
@@ -104,6 +103,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
+
         public async Task<IActionResult> DeleteClient(int id)
         {
             if (_clients == null)
@@ -116,18 +116,19 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return NotFound();
             }
 
-           _repository.Remove(client);
+            _repository.Remove(client);
             await _repository.SaveChangesAsync();
 
             return NoContent();
         }
+
         private bool ClientExists(int id)
         {
             return (_clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
         public ClientDTO? AuthenticateUser(UserDTO user)
         {
-
             var usuario = _repository.GetClientByEmail(user);
 
             if (usuario != null && BCrypt.Net.BCrypt.Verify(user.Password, usuario.Password))
@@ -135,8 +136,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return _mapper.Map<ClientDTO>(usuario);
             }
             return null;
-
-
         }
     }
 }

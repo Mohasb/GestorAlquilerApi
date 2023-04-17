@@ -1,5 +1,3 @@
-using System;
-
 namespace GestorAlquilerApi.BussinessLogicLayer.Models
 {
     public class Planning

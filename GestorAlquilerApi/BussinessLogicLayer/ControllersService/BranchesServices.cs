@@ -13,6 +13,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryBranch _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
+
         public BranchesServices(IQueryBranch repository, IMapper mapper)
         {
             _repository = repository;
@@ -29,16 +30,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var countBranches = (from b in _branches select b).Count();
 
-            if (!Convert.ToBoolean(countBranches)) return NotFound("There are no Branches");
+            if (!Convert.ToBoolean(countBranches))
+                return NotFound("There are no Branches");
 
             var data = _branches;
             var branchesDTO = data.Select(b => _mapper.Map<BranchDTO>(b));
 
             return await branchesDTO.ToListAsync();
         }
+
         public async Task<ActionResult<BranchDTO>> GetBranch(int id)
         {
-
             if (_branches == null)
             {
                 return NotFound();
@@ -54,9 +56,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return branchDTO;
         }
+
         public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO)
         {
-
             var branch = _mapper.Map<Branch>(branchDTO);
             branch.Id = id;
 
@@ -85,6 +87,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
@@ -102,9 +105,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
         }
+
         public async Task<IActionResult> DeleteBranch(int id)
         {
-
             if (_branches == null)
             {
                 return NotFound();
@@ -120,6 +123,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
+
         //////////////////////////////////////////////////////////Helpers///////////////////////////////////////////////
         private bool BranchExists(int id)
         {
@@ -130,24 +134,24 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             var categories = Enum.GetValues(typeof(Car.Categories));
 
-
             for (int i = 0; i < 365; i++)
             {
                 foreach (var categori in categories)
                 {
-                    var plan = _mapper.Map<Planning>(new PlanningDTO
-                    {
-                        Day = DateTime.Now.AddDays(i).ToString(),
-                        CarsAvailables = 0,
-                        CarCategory = categori.ToString(),
-                        BranchId = branch.Id
-                    });
+                    var plan = _mapper.Map<Planning>(
+                        new PlanningDTO
+                        {
+                            Day = DateTime.Now.AddDays(i).ToString(),
+                            CarsAvailables = 0,
+                            CarCategory = categori.ToString(),
+                            BranchId = branch.Id
+                        }
+                    );
                     _repository.AddPlanning(plan);
 
                     await _repository.SaveChangesAsync();
                 }
             }
-
         }
     }
 }

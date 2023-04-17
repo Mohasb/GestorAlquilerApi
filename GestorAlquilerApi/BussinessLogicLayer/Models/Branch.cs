@@ -1,5 +1,4 @@
-﻿
-namespace GestorAlquilerApi.BussinessLogicLayer.Models
+﻿namespace GestorAlquilerApi.BussinessLogicLayer.Models
 {
     public class Branch
     {
