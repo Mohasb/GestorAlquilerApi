@@ -10,5 +10,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
         Task<IActionResult> PutClient(int id, ClientDTO clientDTO);
         Task<ActionResult<ClientDTO>> PostClient(ClientDTO clientDTO);
         Task<IActionResult> DeleteClient(int id);
+        ClientDTO? AuthenticateUser(UserDTO user);
     }
 }

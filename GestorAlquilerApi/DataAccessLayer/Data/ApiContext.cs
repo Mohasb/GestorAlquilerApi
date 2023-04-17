@@ -25,13 +25,12 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
         public DbSet<Reservation> Reservation { get; set; } = default!;
 
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Branch>().HasIndex(b => b.Cif).IsUnique();
             modelBuilder.Entity<Car>().HasIndex(c => c.Registration).IsUnique();
             modelBuilder.Entity<Client>().HasIndex(c => c.Registration).IsUnique();
+            modelBuilder.Entity<Client>().HasIndex(c => c.Email).IsUnique();
         }
 
     }

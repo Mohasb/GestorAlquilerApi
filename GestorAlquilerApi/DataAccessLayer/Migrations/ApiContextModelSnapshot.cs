@@ -121,6 +121,9 @@ namespace GestorAlquilerApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("Registration")
                         .IsUnique();
 

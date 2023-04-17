@@ -1,4 +1,5 @@
-﻿using GestorAlquilerApi.BussinessLogicLayer.Models;
+﻿using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.DataAccessLayer.Interfaces
@@ -10,5 +11,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
         public Task SaveChangesAsync();
         public void AddClient(Client client);
         public void Remove(Client Client);
+        public Client? GetClientByEmail(UserDTO user);
     }
 }

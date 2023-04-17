@@ -1,4 +1,4 @@
-dotnet ef migrations add InitialCreate
+dotnet ef migrations add InitialCreate -o .\DataAccessLayer\
 dotnet ef database update
 dotnet watch
-CONSULTAS SERVICE!!!
+Cambio de campo principal a la calve unique

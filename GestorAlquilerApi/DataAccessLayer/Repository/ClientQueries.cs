@@ -1,4 +1,5 @@
-﻿using GestorAlquilerApi.BussinessLogicLayer.Models;
+﻿using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -32,5 +33,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         {
             _context.Remove(client);
         }
+
+        public Client? GetClientByEmail(UserDTO user)
+        => (from c in _context.Client where c.Email == user.Email select c).FirstOrDefault();
     }
 }

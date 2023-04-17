@@ -125,5 +125,18 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             return (_clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        public ClientDTO? AuthenticateUser(UserDTO user)
+        {
+
+            var usuario = _repository.GetClientByEmail(user);
+
+            if (usuario != null && BCrypt.Net.BCrypt.Verify(user.Password, usuario.Password))
+            {
+                return _mapper.Map<ClientDTO>(usuario);
+            }
+            return null;
+
+
+        }
     }
 }

@@ -28,6 +28,11 @@ builder.Services.AddScoped<IQueryClient, ClientQueries>();
 builder.Services.AddScoped<IPlanningService, PlanningService>();
 builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();
 
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
+
+builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
+
 
 
 

@@ -7,6 +7,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
     {
         Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranchId(int id);
         Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranch(DateTime date, int branchId, string carCategory);
+        
 
     }
 }

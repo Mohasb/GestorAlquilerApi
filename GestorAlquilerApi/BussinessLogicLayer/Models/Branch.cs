@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿
 namespace GestorAlquilerApi.BussinessLogicLayer.Models
 {
     public class Branch

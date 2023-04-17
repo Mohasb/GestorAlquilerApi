@@ -1,13 +1,11 @@
 using System.Security.Claims;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
@@ -18,29 +16,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
-        private readonly ApiContext _context;
-        private readonly IMapper _mapper;
+        private IClientService _clientService;
 
 
-        public LoginController(IConfiguration config, ApiContext context, IMapper mapper)
+        public LoginController(IConfiguration config, IClientService clientService)
         {
             _config = config;
-            _context = context;
-            _mapper = mapper;
+            _clientService = clientService;
         }
         private ClientDTO? AuthenticateUser(UserDTO user)
-        {
-
-            var usuario = (from c in _context.Client where c.Email == user.Email select c).FirstOrDefault();
-
-            if (usuario != null && BCrypt.Net.BCrypt.Verify(user.Password, usuario.Password))
-            {
-                return _mapper.Map<ClientDTO>(usuario);
-            }
-            return null;
-
-
-        }
+        => _clientService.AuthenticateUser(user);
+        
         private string GenerateToken(ClientDTO user)
         {
 
@@ -71,11 +57,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         public IActionResult Login(UserDTO user)
         {
             IActionResult response = Unauthorized();
-            var user_ = AuthenticateUser(user);
+            var _user = AuthenticateUser(user);
 
-            if (user_ != null)
+            if (_user != null)
             {
-                var token = GenerateToken(user_);
+                var token = GenerateToken(_user);
                 response = Ok(new { token });
                 return response;
             }

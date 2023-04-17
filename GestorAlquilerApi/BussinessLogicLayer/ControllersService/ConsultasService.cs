@@ -5,7 +5,6 @@ using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
@@ -14,19 +13,28 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryConsultas _repository;
         private readonly IQueryBranch _branchRepository;
         private readonly IQueryCar _carsRepository;
+        private readonly IQueryReservation _reservationsRepository;
+        private readonly IQueryPlanning _planningRepository;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
         private readonly DbSet<Car> _cars;
+        private readonly DbSet<Reservation> _reservations;
+        private readonly DbSet<Planning> _planning;
 
-        public ConsultasService(IMapper mapper, IQueryConsultas repository, IQueryBranch branchRepository, IQueryCar carsRepository)
+        public ConsultasService(IMapper mapper, IQueryConsultas repository, IQueryBranch branchRepository, IQueryCar carsRepository, IQueryReservation reservationsRepository, IQueryPlanning planningRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _branchRepository = branchRepository;
             _carsRepository = carsRepository;
+            _reservationsRepository = reservationsRepository;
+            _planningRepository = planningRepository;
             /////
             _branches = branchRepository.GetDataBranches();
             _cars = carsRepository.GetDataCars();
+            _reservations = reservationsRepository.GetDataReservation();
+            _planning = planningRepository.GetDataPlanning();
+
         }
         public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranchId(int id)
         {
@@ -50,18 +58,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         }
         public async Task<ActionResult<IEnumerable<ICollection<CarDTO>>>> GetCarsByBranch(DateTime date, int branchId, string carCategory)
         {
-            /*if (_context.Reservation == null || _branches == null || _cars == null)
+            if (_reservations == null || _branches == null || _cars == null)
             {
                 return NotFound();
             }
 
+            var data = _repository.GetPlanningCars(_planning, date, branchId, carCategory);
 
-            var data = from p in _context.Planning
-                       where p.Day == date && p.BranchId == branchId && p.CarCategory == carCategory
-                       select p;
+            return Ok(await data.ToListAsync());
 
-            return Ok(await data.ToListAsync());*/
-            return Ok();
         }
     }
 }
