@@ -1,11 +1,8 @@
-﻿using GestorAlquilerApi.BussinessLogicLayer.DTOs;
-using GestorAlquilerApi.BussinessLogicLayer.Models;
-
-namespace GestorAlquilerApi.BussinessLogicLayer.Responses
+﻿namespace GestorAlquilerApi.BussinessLogicLayer.Responses
 {
-    public interface IResponsesApi
+    public interface IResponsesApi<T>
     {
-        ResponsesApi MessageResponse();
-        ResponsesApi DataResponse(List<Branch> data);
+        ResponsesApi<T> MessageResponse(string message, int errorCode);
+        //ResponsesApi<T> DataResponse(string message, int errorCode, List<T> data);
     }
 }

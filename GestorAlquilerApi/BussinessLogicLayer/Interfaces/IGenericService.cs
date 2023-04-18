@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface IGenericService<T>

@@ -37,7 +37,8 @@ builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>();
 
 builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
 
-builder.Services.AddScoped<IResponsesApi, ResponsesApi>();
+//builder.Services.AddScoped<IResponsesApi, ResponsesApi>();
+//builder.Services.AddScoped(typeof(IResponsesApi<>), typeof(ResponsesApi<>));
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

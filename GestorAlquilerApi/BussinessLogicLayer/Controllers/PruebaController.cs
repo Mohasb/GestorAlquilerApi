@@ -10,7 +10,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     [ApiController]
     public class PruebaController : ControllerBase
     {
-        private readonly IResponsesApi _response;
+        /* private readonly IResponsesApi _response;
         private readonly ApiContext _context;
 
         public PruebaController(IResponsesApi response, ApiContext context)
@@ -29,6 +29,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         public ResponsesApi GetData(int id)
         {
             return _response.DataResponse(_context.Branch.ToList());
-        }
+        } */
     }
 }
