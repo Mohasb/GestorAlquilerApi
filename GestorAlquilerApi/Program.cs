@@ -9,6 +9,7 @@ using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 using GestorAlquilerApi.DataAccessLayer.Repository;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Responses;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 //////////// Add services to the container.//////////////////
 
 //Dependency injection(When a class is added a Interface -> add object of the class that implements the interface)
-builder.Services.AddScoped<IBranchService, BranchesServices>();
+builder.Services.AddScoped(typeof(IGenericService<>), typeof(BranchesServices<>));
 builder.Services.AddScoped<IQueryBranch, BranchQueries>();
 
 builder.Services.AddScoped<ICarsService, CarService>();
