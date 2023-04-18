@@ -29,7 +29,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 //return NotFound();
                 //TODO:Custom Response
-                _response.MessageResponse("sdfsdfsdfsdf", 404);
+                //_response.MessageResponse("sdfsdfsdfsdf", 404);
             }
 
             var countBranches = (from b in _branches select b).Count();
