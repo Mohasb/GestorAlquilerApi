@@ -2,7 +2,6 @@
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
-using GestorAlquilerApi.BussinessLogicLayer.Responses;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryBranch _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
-        private readonly IResponsesApi<BranchDTO> _response;
-        public BranchesServices(IQueryBranch repository, IMapper mapper, IResponsesApi<BranchDTO> response)
+        public BranchesServices(IQueryBranch repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
             _branches = _repository.GetDataBranches();
-            _response = response;
         }
 
         public async Task<IEnumerable<BranchDTO>> GetAllElements()
@@ -29,7 +26,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 //return NotFound();
                 //TODO:Custom Response
-                //_response.MessageResponse("sdfsdfsdfsdf", 404);
             }
 
             var countBranches = (from b in _branches select b).Count();

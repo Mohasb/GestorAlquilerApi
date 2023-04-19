@@ -8,7 +8,6 @@ using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 using GestorAlquilerApi.DataAccessLayer.Repository;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
-using GestorAlquilerApi.BussinessLogicLayer.Responses;
 using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,9 +35,6 @@ builder.Services.AddScoped<IConsultasService, ConsultasService>();
 builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>();
 
 builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
-
-//builder.Services.AddScoped<IResponsesApi, ResponsesApi>();
-//builder.Services.AddScoped(typeof(IResponsesApi<>), typeof(ResponsesApi<>));
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

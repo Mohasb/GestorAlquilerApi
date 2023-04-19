@@ -9,3 +9,4 @@ Ojo con los return de los   SERVICIOS quiter ActionResult. RETORNAR MEJOR LISTAS
 generics c#. uSAR EN INTERFACES Y QUERYS
 //Hacer una clase para reornar de los servicios ??(bien, Mal, datos)
 sqllocaldb
+metodos void que reotnen alg mejor
