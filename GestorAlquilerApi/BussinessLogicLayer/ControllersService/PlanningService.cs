@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class PlanningService : ControllerBase, IPlanningService
+    public class PlanningService<PlanningDTO> : ControllerBase, IGenericService<PlanningDTO>
     {
         private readonly IQueryPlanning _repository;
         private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _planning = _repository.GetDataPlanning();
         }
 
-        public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetAllPlanning()
+        public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetAllElements()
         {
             if (_planning == null)
             {
@@ -31,7 +31,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await planning.ToListAsync();
         }
 
-        public async Task<ActionResult<PlanningDTO>> GetPlanningById(int id)
+        public async Task<ActionResult<PlanningDTO>> GetElementById(int id)
         {
             if (_planning == null)
             {
@@ -48,7 +48,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return planningDTO;
         }
 
-        public async Task<IActionResult> EditPlanning(int id, PlanningDTO planningDTO)
+        public async Task<IActionResult> EditElement(int id, PlanningDTO planningDTO)
         {
             var planning = _mapper.Map<Planning>(planningDTO);
 
@@ -77,8 +77,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             return NoContent();
         }
-
-        public async Task<ActionResult<Planning>> AddPlanning(PlanningDTO planningDTO)
+        public async Task<ActionResult<PlanningDTO>> AddElement(PlanningDTO planningDTO)
         {
             if (_planning == null)
             {
@@ -93,7 +92,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetPlanning", new { id = planning.Id }, planning);
         }
 
-        public async Task<IActionResult> RemovePlanning(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
             if (_planning == null)
             {

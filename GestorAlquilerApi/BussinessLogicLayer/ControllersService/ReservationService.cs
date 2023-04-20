@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class ReservationService : ControllerBase, IReservationService
+    public class ReservationService<ReservationDTO> : ControllerBase, IGenericService<ReservationDTO>
     {
         private readonly IQueryReservation _repository;
         private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _reservations = _repository.GetDataReservation();
         }
 
-        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllReservations()
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllElements()
         {
             if (_reservations == null)
             {
@@ -36,7 +36,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await reservations.ToListAsync();
         }
 
-        public async Task<ActionResult<ReservationDTO>> GetReservationById(int id)
+        public async Task<ActionResult<ReservationDTO>> GetElementById(int id)
         {
             if (_reservations == null)
             {
@@ -53,7 +53,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return reservationDTO;
         }
 
-        public async Task<IActionResult> EditReservation(int id, ReservationDTO reservationDTO)
+        public async Task<IActionResult> EditElement(int id, ReservationDTO reservationDTO)
         {
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
@@ -83,7 +83,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<ReservationDTO>> AddReservationSameBranch(
+        public async Task<ActionResult<ReservationDTO>> AddElement(
             ReservationDTO reservationDTO
         )
         {
@@ -102,7 +102,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
         }
 
-        public async Task<IActionResult> RemoveReservation(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
             if (_reservations == null)
             {

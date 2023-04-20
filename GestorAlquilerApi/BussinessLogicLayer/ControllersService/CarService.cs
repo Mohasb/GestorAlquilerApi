@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class CarService : ControllerBase, ICarsService
+    public class CarService<CarDTO> : ControllerBase, IGenericService<CarDTO>
     {
         private readonly IQueryCar _repository;
         private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _cars = _repository.GetDataCars();
         }
 
-        public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllCars()
+        public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllElements()
         {
             if (_cars == null)
             {
@@ -37,7 +37,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await cars.ToListAsync();
         }
 
-        public async Task<ActionResult<CarDTO>> GetCarById(int id)
+        public async Task<ActionResult<CarDTO>> GetElementById(int id)
         {
             if (_cars == null)
             {
@@ -55,7 +55,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return carDTO;
         }
 
-        public async Task<IActionResult> EditCar(int id, CarDTO carDTO)
+        public async Task<IActionResult> EditElement(int id, CarDTO carDTO)
         {
             var car = _mapper.Map<Car>(carDTO);
             car.Id = id;
@@ -86,7 +86,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<CarDTO>> AddCar(CarDTO carDTO)
+        public async Task<ActionResult<CarDTO>> AddElement(CarDTO carDTO)
         {
             var car = _mapper.Map<Car>(carDTO);
 
@@ -108,12 +108,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             await _repository.SaveChangesAsync();
 
             //Here is addedd a this car to availables in planning
-            AddCarToAvaildables(carDTO);
+            //TODO: This is not working
+            //AddCarToAvaildables(carDTO);
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
 
-        public async Task<IActionResult> RemoveCar(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
             if (_cars == null)
             {
@@ -127,7 +128,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.Remove(car);
             //Delete car from availables planning
-            RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
+            //TODO: This is not working
+            //RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
             await _repository.SaveChangesAsync();
 
             return NoContent();
@@ -138,8 +140,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-        private async void AddCarToAvaildables(CarDTO carDTO)
+        //TODO: add this method
+        /* private async void AddCarToAvaildables(CarDTO carDTO)
         {
             var planning = _repository.GetDataPlanning(carDTO);
 
@@ -158,6 +160,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 plan.CarsAvailables--;
             }
             await _repository.SaveChangesAsync();
-        }
+        } */
     }
 }

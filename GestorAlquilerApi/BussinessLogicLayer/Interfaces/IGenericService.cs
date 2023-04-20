@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface IGenericService<T>
     {
-        Task<IEnumerable<T>> GetAllElements();
-        Task<T> GetElementById(int id);
-        void EditElement(int id, T element);
-        Task<T> AddElement(T element);
-        void RemoveElement(int id);
+        Task<ActionResult<IEnumerable<T>>> GetAllElements();
+        Task<ActionResult<T>> GetElementById(int id);
+        Task<IActionResult> EditElement(int id, T element);
+        Task<ActionResult<T>> AddElement(T element);
+        Task<IActionResult> RemoveElement(int id);
     }
 }

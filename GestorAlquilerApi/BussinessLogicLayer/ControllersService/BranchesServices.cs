@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class BranchesServices<BranchDTO> : IGenericService<BranchDTO>
+    public class BranchesServices<BranchDTO> : ControllerBase, IGenericService<BranchDTO>
     {
         private readonly IQueryBranch _repository;
         private readonly IMapper _mapper;
@@ -20,58 +20,56 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _branches = _repository.GetDataBranches();
         }
 
-        public async Task<IEnumerable<BranchDTO>> GetAllElements()
+        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllElements()
         {
             if (_branches == null)
             {
-                //return NotFound();
-                //TODO:Custom Response
-                //Empiezo de nuevo
+                return NotFound();
             }
 
             var countBranches = (from b in _branches select b).Count();
 
-            /* if (!Convert.ToBoolean(countBranches))
-                return NotFound("There are no Branches"); */
+             if (!Convert.ToBoolean(countBranches))
+                return NotFound("There are no Branches"); 
 
-            var data = _branches;
-            var branchesDTO = data.Select(b => _mapper.Map<BranchDTO>(b));
+     
+            var branchesDTO = _branches.Select(b => _mapper.Map<BranchDTO>(b));
 
             return await branchesDTO.ToListAsync();
         }
 
-        public async Task<BranchDTO> GetElementById(int id)
+        public async Task<ActionResult<BranchDTO>> GetElementById(int id)
         {
-            /* if (_branches == null)
+            if (_branches == null)
             {
                 return NotFound();
-            } */
+            } 
             var branch = await _branches.FindAsync(id);
 
-            /* if (branch == null)
+            if (branch == null)
             {
                 return NotFound($"There are no branch with id: {id}");
-            } */
+            } 
 
             var branchDTO = _mapper.Map<BranchDTO>(branch);
 
             return branchDTO;
         }
 
-        public async void EditElement(int id, BranchDTO branchDTO)
+        public async Task<IActionResult> EditElement(int id, BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
             branch.Id = id;
 
-            /* if (id != branch.Id)
+            if (id != branch.Id)
             {
                 return BadRequest();
-            } */
+            } 
 
             _repository.ModifiedState(branch);
 
                 await _repository.SaveChangesAsync();
-            /* try
+            try
             {
             }
             catch (DbUpdateConcurrencyException)
@@ -86,17 +84,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
 
-            return NoContent(); */
+            return NoContent(); 
         }
 
-        public async Task<BranchDTO> AddElement(BranchDTO branchDTO)
+        public async Task<ActionResult<BranchDTO>> AddElement(BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
 
-            /* if (_branches == null)
+            if (_branches == null)
             {
                 return Problem("Entity set 'ApiContext.Branch'  is null.");
-            } */
+            }
 
             _repository.AddBranch(branch);
 
@@ -104,26 +102,25 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
-            //return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
-            return _mapper.Map<BranchDTO>(branch);
+            return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
         }
 
-        public async void RemoveElement(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
             var branch = await _branches.FindAsync(id);
-            /* if (_branches == null)
+            if (_branches == null)
             {
                 return NotFound();
             }
             if (branch == null)
             {
                 return NotFound();
-            } */
+            } 
 
             _repository.Remove(branch);
             await _repository.SaveChangesAsync();
 
-            //return NoContent();
+            return NoContent();
         }
 
         //////////////////////////////////////////////////////////Helpers///////////////////////////////////////////////

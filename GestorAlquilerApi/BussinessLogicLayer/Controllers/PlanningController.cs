@@ -9,9 +9,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     [ApiController]
     public class PlanningController
     {
-        private readonly IPlanningService _planningService;
+        private readonly IGenericService<PlanningDTO> _planningService;
 
-        public PlanningController(IPlanningService planningService)
+        public PlanningController(IGenericService<PlanningDTO> planningService)
         {
             _planningService = planningService;
         }
@@ -20,30 +20,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetPlanning() =>
-            await _planningService.GetAllPlanning();
+            await _planningService.GetAllElements();
 
         // GET: api/Planning/5
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<PlanningDTO>> GetPlanning(int id) =>
-            await _planningService.GetPlanningById(id);
+            await _planningService.GetElementById(id);
 
         // PUT: api/Planning/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutPlanning(int id, PlanningDTO planningDTO) =>
-            await _planningService.EditPlanning(id, planningDTO);
+            await _planningService.EditElement(id, planningDTO);
 
         // POST: api/Planning
         [HttpPost]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Planning>> PostPlanning(PlanningDTO planningDTO) =>
-            await _planningService.AddPlanning(planningDTO);
+        public async Task<ActionResult<PlanningDTO>> PostPlanning(PlanningDTO planningDTO) =>
+            await _planningService.AddElement(planningDTO);
 
         // DELETE: api/Planning/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlanning(int id) =>
-            await _planningService.RemovePlanning(id);
+            await _planningService.RemoveElement(id);
     }
 }

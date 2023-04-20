@@ -9,9 +9,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     [ApiController]
     public class ReservationsController
     {
-        private readonly IReservationService _repository;
+        private readonly IGenericService<ReservationDTO> _repository;
 
-        public ReservationsController(IReservationService repository)
+        public ReservationsController(IGenericService<ReservationDTO> repository)
         {
             _repository = repository;
         }
@@ -20,31 +20,31 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservation() =>
-            await _repository.GetAllReservations();
+            await _repository.GetAllElements();
 
         // GET: api/Reservations/5
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ReservationDTO>> GetReservation(int id) =>
-            await _repository.GetReservationById(id);
+            await _repository.GetElementById(id);
 
         // PUT: api/Reservations/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutReservation(int id, ReservationDTO reservationDTO) =>
-            await _repository.EditReservation(id, reservationDTO);
+            await _repository.EditElement(id, reservationDTO);
 
         // POST: api/Reservations
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ReservationDTO>> PostReservation(
             ReservationDTO reservationDTO
-        ) => await _repository.AddReservationSameBranch(reservationDTO);
+        ) => await _repository.AddElement(reservationDTO);
 
         // DELETE: api/Reservations/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReservation(int id) =>
-            await _repository.RemoveReservation(id);
+            await _repository.RemoveElement(id);
     }
 }
