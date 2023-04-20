@@ -38,7 +38,8 @@ builder.Services.AddScoped(typeof(IPermuteData<Car>), typeof(PermuteData<Car>));
 builder.Services.AddScoped(typeof(IPermuteData<Client>), typeof(PermuteData<Client>));
 builder.Services.AddScoped(typeof(IPermuteData<Planning>), typeof(PermuteData<Planning>));
 builder.Services.AddScoped(typeof(IPermuteData<Reservation>), typeof(PermuteData<Reservation>));
-
+////////////////////////////////////////////////////////////////////////////////
+builder.Services.AddScoped(typeof(IGenericQuery<Branch>), typeof(GenericQueries<Branch>));
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

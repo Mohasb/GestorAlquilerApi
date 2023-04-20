@@ -12,18 +12,26 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
     {
         private readonly IQueryBranch _repository;
         private readonly IPermuteData<Branch> _permuteData;
+        private readonly IGenericQuery<Branch> _query;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
-        public BranchesServices(IQueryBranch repository, IMapper mapper, IPermuteData<Branch> permuteData)
+        private readonly IQueryable<Branch> _prueba;
+        public BranchesServices(IQueryBranch repository, IMapper mapper, IPermuteData<Branch> permuteData, IGenericQuery<Branch> query)
         {
             _repository = repository;
             _mapper = mapper;
             _branches = _repository.GetDataBranches();
             _permuteData = permuteData;
+            _query = query;
+            _prueba = _query.GetAllElements();
         }
 
         public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllElements()
         {
+
+            var prueba = _prueba;
+
+
             if (_branches == null)
             {
                 return NotFound();
