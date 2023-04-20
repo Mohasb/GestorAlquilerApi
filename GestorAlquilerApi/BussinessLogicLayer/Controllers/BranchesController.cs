@@ -2,6 +2,7 @@
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
@@ -9,9 +10,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     [ApiController]
     public class BranchesController
     {
-        private readonly IBranchService _branchService;
+        private readonly IGenericService<BranchDTO> _branchService;
 
-        public BranchesController(IBranchService branchService)
+        public BranchesController(IGenericService<BranchDTO> branchService)
         {
             _branchService = branchService;
         }
@@ -20,30 +21,28 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BranchDTO>>> GetBranch() =>
-            await _branchService.GetAllBranches();
+            await _branchService.GetAllElements();
 
         // GET: api/Branches/{id}
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<BranchDTO>> GetBranch(int id) =>
-            await _branchService.GetBranchById(id);
+        public async Task<ActionResult<BranchDTO>> GetBranch(int id) => await _branchService.GetElementById(id);
 
         // PUT: api/Branches/{id}
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutBranch(int id, BranchDTO branchDTO) =>
-            await _branchService.EditBranch(id, branchDTO);
+        public Task<IActionResult> PutBranch(int id, BranchDTO branchDTO) =>
+            _branchService.EditElement(id, branchDTO);
 
         // POST: api/Branches
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<BranchDTO>> PostBranch(BranchDTO branchDTO) =>
-            await _branchService.AddBranch(branchDTO);
+            await _branchService.AddElement(branchDTO);
 
         // DELETE: api/Branches/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteBranch(int id) =>
-            await _branchService.RemoveBranch(id);
+        public Task<IActionResult> DeleteBranch(int id) => _branchService.RemoveElement(id);
     }
 }

@@ -8,12 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class BranchesServices : ControllerBase, IBranchService
+    public class BranchesServices<BranchDTO> : ControllerBase, IGenericService<BranchDTO>
     {
         private readonly IQueryBranch _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
-
         public BranchesServices(IQueryBranch repository, IMapper mapper)
         {
             _repository = repository;
@@ -21,7 +20,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _branches = _repository.GetDataBranches();
         }
 
-        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllBranches()
+        public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllElements()
         {
             if (_branches == null)
             {
@@ -30,34 +29,34 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var countBranches = (from b in _branches select b).Count();
 
-            if (!Convert.ToBoolean(countBranches))
-                return NotFound("There are no Branches");
+             if (!Convert.ToBoolean(countBranches))
+                return NotFound("There are no Branches"); 
 
-            var data = _branches;
-            var branchesDTO = data.Select(b => _mapper.Map<BranchDTO>(b));
+     
+            var branchesDTO = _branches.Select(b => _mapper.Map<BranchDTO>(b));
 
             return await branchesDTO.ToListAsync();
         }
 
-        public async Task<ActionResult<BranchDTO>> GetBranchById(int id)
+        public async Task<ActionResult<BranchDTO>> GetElementById(int id)
         {
             if (_branches == null)
             {
                 return NotFound();
-            }
+            } 
             var branch = await _branches.FindAsync(id);
 
             if (branch == null)
             {
                 return NotFound($"There are no branch with id: {id}");
-            }
+            } 
 
             var branchDTO = _mapper.Map<BranchDTO>(branch);
 
             return branchDTO;
         }
 
-        public async Task<IActionResult> EditBranch(int id, BranchDTO branchDTO)
+        public async Task<IActionResult> EditElement(int id, BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
             branch.Id = id;
@@ -65,13 +64,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (id != branch.Id)
             {
                 return BadRequest();
-            }
+            } 
 
             _repository.ModifiedState(branch);
 
+                await _repository.SaveChangesAsync();
             try
             {
-                await _repository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,10 +84,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
 
-            return NoContent();
+            return NoContent(); 
         }
 
-        public async Task<ActionResult<BranchDTO>> AddBranch(BranchDTO branchDTO)
+        public async Task<ActionResult<BranchDTO>> AddElement(BranchDTO branchDTO)
         {
             var branch = _mapper.Map<Branch>(branchDTO);
 
@@ -106,17 +105,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
         }
 
-        public async Task<IActionResult> RemoveBranch(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
+            var branch = await _branches.FindAsync(id);
             if (_branches == null)
             {
                 return NotFound();
             }
-            var branch = await _branches.FindAsync(id);
             if (branch == null)
             {
                 return NotFound();
-            }
+            } 
 
             _repository.Remove(branch);
             await _repository.SaveChangesAsync();

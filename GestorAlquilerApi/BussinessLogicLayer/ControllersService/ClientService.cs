@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class ClientService : ControllerBase, IClientService
+    public class ClientService<ClientDTO> : ControllerBase, IGenericService<ClientDTO>
     {
         private readonly IQueryClient _repository;
         private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _clients = _repository.GetDataClients();
         }
 
-        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAllClients()
+        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAllElements()
         {
             if (_clients == null)
             {
@@ -39,7 +39,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await clients.ToListAsync();
         }
 
-        public async Task<ActionResult<ClientDTO>> GetClientById(int id)
+        public async Task<ActionResult<ClientDTO>> GetElementById(int id)
         {
             if (_clients == null)
             {
@@ -56,7 +56,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return clientDto;
         }
 
-        public async Task<IActionResult> EditClient(int id, ClientDTO clientDTO)
+        public async Task<IActionResult> EditElement(int id, ClientDTO clientDTO)
         {
             var client = _mapper.Map<Client>(clientDTO);
             client.Id = id;
@@ -86,9 +86,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<ClientDTO>> AddClient(ClientDTO clientDTO)
+        public async Task<ActionResult<ClientDTO>> AddElement(ClientDTO clientDTO)
         {
-            clientDTO.Password = BCrypt.Net.BCrypt.HashPassword(clientDTO.Password);
+            //TODO
+            //clientDTO.Password = BCrypt.Net.BCrypt.HashPassword(clientDTO.Password);
 
             var client = _mapper.Map<Client>(clientDTO);
 
@@ -104,7 +105,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
 
-        public async Task<IActionResult> RemoveClient(int id)
+        public async Task<IActionResult> RemoveElement(int id)
         {
             if (_clients == null)
             {
@@ -126,8 +127,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             return (_clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-        public ClientDTO? AuthenticateUser(UserDTO user)
+        //TODO
+        /* public ClientDTO? AuthenticateUser(UserDTO user)
         {
             var usuario = _repository.GetClientByEmail(user);
 
@@ -136,6 +137,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return _mapper.Map<ClientDTO>(usuario);
             }
             return null;
-        }
+        } */
     }
 }

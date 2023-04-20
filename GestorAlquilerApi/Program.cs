@@ -8,7 +8,7 @@ using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 using GestorAlquilerApi.DataAccessLayer.Repository;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
-using GestorAlquilerApi.BussinessLogicLayer.Responses;
+using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,27 +16,25 @@ var builder = WebApplication.CreateBuilder(args);
 //////////// Add services to the container.//////////////////
 
 //Dependency injection(When a class is added a Interface -> add object of the class that implements the interface)
-builder.Services.AddScoped<IBranchService, BranchesServices>();
+builder.Services.AddScoped(typeof(IGenericService<BranchDTO>), typeof(BranchesServices<BranchDTO>));
 builder.Services.AddScoped<IQueryBranch, BranchQueries>();
 
-builder.Services.AddScoped<ICarsService, CarService>();
+builder.Services.AddScoped(typeof(IGenericService<CarDTO>), typeof(CarService<CarDTO>));
 builder.Services.AddScoped<IQueryCar, CarQueries>();
 
-builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped(typeof(IGenericService<ClientDTO>), typeof(ClientService<ClientDTO>));
 builder.Services.AddScoped<IQueryClient, ClientQueries>();
 
-builder.Services.AddScoped<IPlanningService, PlanningService>();
+builder.Services.AddScoped(typeof(IGenericService<PlanningDTO>), typeof(PlanningService<PlanningDTO>));
 builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();
 
-builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped(typeof(IGenericService<ReservationDTO>), typeof(ReservationService<ReservationDTO>));
 builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
 
-builder.Services.AddScoped<IConsultasService, ConsultasService>();
-builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>();
+/* builder.Services.AddScoped<IConsultasService, ConsultasService>();
+builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>(); */
 
-builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
-
-builder.Services.AddScoped<IResponses, Response>();
+//builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -17,7 +17,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _users = _repository.GetDataClients();
         }
 
-        public async Task<IActionResult> EditClient(string email)
+        public async Task<IActionResult> EditUserRol(string email)
         {
             var client = _users.FirstOrDefault(x => x.Email == email);
 
