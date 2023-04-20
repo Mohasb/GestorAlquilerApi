@@ -9,6 +9,7 @@ using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 using GestorAlquilerApi.DataAccessLayer.Repository;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +32,8 @@ builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();
 builder.Services.AddScoped(typeof(IGenericService<ReservationDTO>), typeof(ReservationService<ReservationDTO>));
 builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
 
-/* builder.Services.AddScoped<IConsultasService, ConsultasService>();
-builder.Services.AddScoped<IQueryConsultas, ConsultasQueries>(); */
 
-//builder.Services.AddScoped<ISetUserAdminService, SetUserAdminService>();
+builder.Services.AddScoped(typeof(IPermuteData<Branch>), typeof(PermuteData<Branch>));
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

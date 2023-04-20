@@ -11,13 +11,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
     public class BranchesServices<BranchDTO> : ControllerBase, IGenericService<BranchDTO>
     {
         private readonly IQueryBranch _repository;
+        private readonly IPermuteData<Branch> _permuteData;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
-        public BranchesServices(IQueryBranch repository, IMapper mapper)
+        public BranchesServices(IQueryBranch repository, IMapper mapper, IPermuteData<Branch> permuteData)
         {
             _repository = repository;
             _mapper = mapper;
             _branches = _repository.GetDataBranches();
+            _permuteData = permuteData;
         }
 
         public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllElements()
@@ -66,9 +68,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             } 
 
-            _repository.ModifiedState(branch);
+            _permuteData.ModifiedState(branch);
 
-                await _repository.SaveChangesAsync();
+                await _permuteData.SaveChangesAsync();
             try
             {
             }
@@ -98,7 +100,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddBranch(branch);
 
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
@@ -118,7 +120,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             } 
 
             _repository.Remove(branch);
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             return NoContent();
         }
@@ -148,7 +150,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     );
                     _repository.AddPlanning(plan);
 
-                    await _repository.SaveChangesAsync();
+                    await _permuteData.SaveChangesAsync();
                 }
             }
         }

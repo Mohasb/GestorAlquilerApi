@@ -18,11 +18,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
 
         public DbSet<Planning> GetDataPlanning() => _context.Planning;
 
-        public void ModifiedState(Branch branch) =>
-            _context.Entry(branch).State = EntityState.Modified;
-
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-
         public void AddBranch(Branch branch) => _context.Add(branch);
 
         public void Remove(Branch branch) => _context.Remove(branch);
