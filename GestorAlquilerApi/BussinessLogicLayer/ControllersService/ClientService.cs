@@ -13,12 +13,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryClient _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Client> _clients;
+        private readonly IPermuteData<Client> _permuteData;
 
-        public ClientService(IQueryClient repository, IMapper mapper)
+        public ClientService(IQueryClient repository, IMapper mapper, IPermuteData<Client> permuteData)
         {
             _repository = repository;
             _mapper = mapper;
             _clients = _repository.GetDataClients();
+            _permuteData = permuteData;
         }
 
         public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAllElements()
@@ -65,11 +67,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return BadRequest();
             }
-            _repository.ModifiedState(client);
+            _permuteData.ModifiedState(client);
 
             try
             {
-                await _repository.SaveChangesAsync();
+                await _permuteData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -100,7 +102,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddClient(client);
 
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
@@ -118,7 +120,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             _repository.Remove(client);
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             return NoContent();
         }

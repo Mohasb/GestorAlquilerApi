@@ -13,12 +13,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryReservation _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Reservation> _reservations;
+        private readonly IPermuteData<Reservation> _permuteData;
 
-        public ReservationService(IQueryReservation repository, IMapper mapper)
+        public ReservationService(IQueryReservation repository, IMapper mapper, IPermuteData<Reservation> permuteData)
         {
             _repository = repository;
             _mapper = mapper;
             _reservations = _repository.GetDataReservation();
+            _permuteData = permuteData;
         }
 
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllElements()
@@ -62,11 +64,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             }
 
-            _repository.ModifiedState(reservation);
+            _permuteData.ModifiedState(reservation);
 
             try
             {
-                await _repository.SaveChangesAsync();
+                await _permuteData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -95,7 +97,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
             _repository.AddReservation(reservation);
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             RemoveCarFromAvailable(reservation);
 
@@ -115,7 +117,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             _reservations.Remove(reservation);
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             return NoContent();
         }
@@ -133,7 +135,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 day.CarsAvailables--;
             }
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
         }
     }
 }

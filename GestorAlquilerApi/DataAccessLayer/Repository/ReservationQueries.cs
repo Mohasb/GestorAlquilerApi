@@ -16,11 +16,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
 
         public DbSet<Reservation> GetDataReservation() => _context.Reservation;
 
-        public void ModifiedState(Reservation reservation) =>
-            _context.Entry(reservation).State = EntityState.Modified;
-
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-
         public void AddReservation(Reservation reservation) => _context.Add(reservation);
 
         public void Remove(Reservation reservation) => _context.Remove(reservation);

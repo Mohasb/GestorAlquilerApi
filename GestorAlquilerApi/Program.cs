@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //////////// Add services to the container.//////////////////
 
-//Dependency injection(When a class is added a Interface -> add object of the class that implements the interface)
+//Dependency injection for Bussiness Logic Layer
 builder.Services.AddScoped(typeof(IGenericService<BranchDTO>), typeof(BranchesServices<BranchDTO>));
 builder.Services.AddScoped<IQueryBranch, BranchQueries>();
 
@@ -32,8 +32,13 @@ builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();
 builder.Services.AddScoped(typeof(IGenericService<ReservationDTO>), typeof(ReservationService<ReservationDTO>));
 builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
 
-
+//Dependency injection for Data Acces Layer
 builder.Services.AddScoped(typeof(IPermuteData<Branch>), typeof(PermuteData<Branch>));
+builder.Services.AddScoped(typeof(IPermuteData<Car>), typeof(PermuteData<Car>));
+builder.Services.AddScoped(typeof(IPermuteData<Client>), typeof(PermuteData<Client>));
+builder.Services.AddScoped(typeof(IPermuteData<Planning>), typeof(PermuteData<Planning>));
+builder.Services.AddScoped(typeof(IPermuteData<Reservation>), typeof(PermuteData<Reservation>));
+
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

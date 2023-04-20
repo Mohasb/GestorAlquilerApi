@@ -16,12 +16,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         }
 
         public DbSet<Planning> GetDataPlanning() => _context.Planning;
-
-        public void ModifiedState(Planning planning) =>
-            _context.Entry(planning).State = EntityState.Modified;
-
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-
         public void AddPlanning(Planning planning) => _context.Add(planning);
 
         public void Remove(Planning planning) => _context.Remove(planning);

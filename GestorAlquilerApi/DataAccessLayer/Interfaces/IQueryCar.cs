@@ -8,8 +8,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
     {
         public DbSet<Car> GetDataCars();
         public IQueryable<Planning> GetDataPlanning(CarDTO carDTO);
-        public void ModifiedState(Car car);
-        public Task SaveChangesAsync();
         public void Remove(Car car);
         public void AddCar(Car car);
     }

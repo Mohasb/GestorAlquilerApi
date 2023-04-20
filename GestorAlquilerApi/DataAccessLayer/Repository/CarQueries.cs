@@ -23,11 +23,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             select p;
 
         public void AddCar(Car car) => _context.Add(car);
-
-        public void ModifiedState(Car car) => _context.Entry(car).State = EntityState.Modified;
-
         public void Remove(Car car) => _context.Remove(car);
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
     }
 }

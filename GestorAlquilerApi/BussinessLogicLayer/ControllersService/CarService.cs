@@ -13,12 +13,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryCar _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Car> _cars;
+        private readonly IPermuteData<Car> _permuteData;
 
-        public CarService(IQueryCar repository, IMapper mapper)
+        public CarService(IQueryCar repository, IMapper mapper, IPermuteData<Car> permuteData)
         {
             _repository = repository;
             _mapper = mapper;
             _cars = _repository.GetDataCars();
+            _permuteData = permuteData;
         }
 
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllElements()
@@ -65,11 +67,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             }
 
-            _repository.ModifiedState(car);
+            _permuteData.ModifiedState(car);
 
             try
             {
-                await _repository.SaveChangesAsync();
+                await _permuteData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -105,7 +107,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddCar(car);
 
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             //Here is addedd a this car to availables in planning
             //TODO: This is not working
@@ -130,7 +132,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //Delete car from availables planning
             //TODO: This is not working
             //RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
-            await _repository.SaveChangesAsync();
+            await _permuteData.SaveChangesAsync();
 
             return NoContent();
         }
