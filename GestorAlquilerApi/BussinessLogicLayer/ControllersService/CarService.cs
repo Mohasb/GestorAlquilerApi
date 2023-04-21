@@ -96,18 +96,42 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return Problem("Entity set 'ApiContext.Car'  is null.");
             }
-            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
 
+
+            try
+            {
+            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
             if (!valuesAsArray.Contains(car.Category))
             {
                 return Problem(
                     $"Category '{car.Category}' is invalid. It has to be in: '{string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[valuesAsArray.Length - 1]}'"
                 );
             }
-
             _repository.AddCar(car);
 
             await _saveData.SaveChangesAsync();
+
+                
+            }
+            catch (DbUpdateException ex)
+            {
+
+                var barrr = ex;
+
+
+
+                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                {
+                    return BadRequest(
+                        $"Problem adding element. There is already an element with Cif = ''."
+                    );
+                }
+            }
+
+
+
+
+
 
             //Here is addedd a this car to availables in planning
             //TODO: This is not working
