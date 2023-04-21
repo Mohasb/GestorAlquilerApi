@@ -14,6 +14,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly ISaveData<Branch> _saveData;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
+
         public BranchesServices(IQueryBranch repository, IMapper mapper, ISaveData<Branch> saveData)
         {
             _repository = repository;
@@ -69,13 +70,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _saveData.ModifiedState(branch);
 
-            await _saveData.SaveChangesAsync();
-            try { }
+            //TODO
+            try
+            {
+                await _saveData.SaveChangesAsync();
+            }
             catch (DbUpdateConcurrencyException)
             {
                 if (!BranchExists(id))
                 {
-                    return NotFound($"There are no branch with id: {id}");
+                    return BadRequest($"There are no branch with id: {id}");
                 }
                 else
                 {
@@ -97,7 +101,20 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddBranch(branch);
 
-            await _saveData.SaveChangesAsync();
+            try
+            {
+                await _saveData.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                {
+                    return BadRequest(
+                        $"Problem adding element. There is already an element with Cif = '{branch.Cif}'."
+                    );
+                }
+            }
+
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
@@ -113,7 +130,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             if (branch == null)
             {
-                return NotFound();
+                return NotFound($"There are no branch with id: {id}");
             }
 
             _repository.Remove(branch);
