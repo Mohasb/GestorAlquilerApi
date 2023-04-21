@@ -1,4 +1,3 @@
-
 using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GestorAlquilerApi.DataAccessLayer.Repository
 {
     public class GenericQueries<T> : IGenericQuery<T>
+        where T : class
     {
         private readonly ApiContext _context;
 
@@ -13,28 +13,18 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         {
             _context = context;
         }
-        public T AddElement(T element)
-        {
-            throw new NotImplementedException();
-        }
 
         public IQueryable<T> GetAllElements()
         {
-            var type = typeof(T);
-            Console.WriteLine(type);
-            throw new NotImplementedException();
-            //return _context.Set<typeof(T)>();
-            //return _context.GetType(T);
+            return _context.Set<T>();
         }
-
-        public List<T> GetdataById(int id)
+        public T AddElement(T element)
         {
-            throw new NotImplementedException();
+            return _context.Add<T>(element);
         }
-
         public T RemoveElement(T element)
         {
-            throw new NotImplementedException();
+            _context.Remove(element);
         }
     }
 }

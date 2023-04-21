@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.DataAccessLayer.Repository
 {
-    public class PermuteData<T> : IPermuteData<T>
+    public class SaveData<T> : ISaveData<T>
     {
         private readonly ApiContext _context;
 
-        public PermuteData(ApiContext context)
+        public SaveData(ApiContext context)
         {
             _context = context;
         }

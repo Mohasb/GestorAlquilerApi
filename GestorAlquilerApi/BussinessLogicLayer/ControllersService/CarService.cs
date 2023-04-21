@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -13,14 +12,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryCar _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Car> _cars;
-        private readonly IPermuteData<Car> _permuteData;
+        private readonly ISaveData<Car> _saveData;
 
-        public CarService(IQueryCar repository, IMapper mapper, IPermuteData<Car> permuteData)
+        public CarService(IQueryCar repository, IMapper mapper, ISaveData<Car> saveData)
         {
             _repository = repository;
             _mapper = mapper;
             _cars = _repository.GetDataCars();
-            _permuteData = permuteData;
+            _saveData = saveData;
         }
 
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllElements()
@@ -67,11 +66,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             }
 
-            _permuteData.ModifiedState(car);
+            _saveData.ModifiedState(car);
 
             try
             {
-                await _permuteData.SaveChangesAsync();
+                await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,7 +106,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddCar(car);
 
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             //Here is addedd a this car to availables in planning
             //TODO: This is not working
@@ -132,7 +131,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //Delete car from availables planning
             //TODO: This is not working
             //RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return NoContent();
         }

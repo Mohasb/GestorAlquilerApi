@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -13,14 +12,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryClient _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Client> _clients;
-        private readonly IPermuteData<Client> _permuteData;
+        private readonly ISaveData<Client> _saveData;
 
-        public ClientService(IQueryClient repository, IMapper mapper, IPermuteData<Client> permuteData)
+        public ClientService(IQueryClient repository, IMapper mapper, ISaveData<Client> saveData)
         {
             _repository = repository;
             _mapper = mapper;
             _clients = _repository.GetDataClients();
-            _permuteData = permuteData;
+            _saveData = saveData;
         }
 
         public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAllElements()
@@ -67,11 +66,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return BadRequest();
             }
-            _permuteData.ModifiedState(client);
+            _saveData.ModifiedState(client);
 
             try
             {
-                await _permuteData.SaveChangesAsync();
+                await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -102,7 +101,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddClient(client);
 
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
@@ -120,7 +119,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             _repository.Remove(client);
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return NoContent();
         }

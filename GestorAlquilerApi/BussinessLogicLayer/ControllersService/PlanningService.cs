@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -13,14 +12,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryPlanning _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Planning> _planning;
-        private readonly IPermuteData<Planning> _permuteData;
+        private readonly ISaveData<Planning> _saveData;
 
-        public PlanningService(IQueryPlanning repository, IMapper mapper, IPermuteData<Planning> permuteData)
+        public PlanningService(IQueryPlanning repository, IMapper mapper, ISaveData<Planning> saveData)
         {
             _repository = repository;
             _mapper = mapper;
             _planning = _repository.GetDataPlanning();
-            _permuteData = permuteData;
+            _saveData = saveData;
         }
 
         public async Task<ActionResult<IEnumerable<PlanningDTO>>> GetAllElements()
@@ -59,11 +58,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             }
 
-            _permuteData.ModifiedState(planning);
+            _saveData.ModifiedState(planning);
 
             try
             {
-                await _permuteData.SaveChangesAsync();
+                await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -89,7 +88,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             var planning = _mapper.Map<Planning>(planningDTO);
 
             _repository.AddPlanning(planning);
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return CreatedAtAction("GetPlanning", new { id = planning.Id }, planning);
         }
@@ -107,7 +106,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             _repository.Remove(planning);
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return NoContent();
         }
