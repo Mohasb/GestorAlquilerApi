@@ -39,6 +39,9 @@ builder.Services.AddScoped(typeof(ISaveData<Client>), typeof(SaveData<Client>));
 builder.Services.AddScoped(typeof(ISaveData<Planning>), typeof(SaveData<Planning>));
 builder.Services.AddScoped(typeof(ISaveData<Reservation>), typeof(SaveData<Reservation>));
 
+//////////
+builder.Services.AddScoped<ILoginService, LoginService>();
+
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //DBContext

@@ -89,10 +89,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public async Task<ActionResult<ClientDTO>> AddElement(ClientDTO clientDTO)
         {
-            //TODO
-            //clientDTO.Password = BCrypt.Net.BCrypt.HashPassword(clientDTO.Password);
-
             var client = _mapper.Map<Client>(clientDTO);
+            client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
 
             if (_clients == null)
             {
@@ -128,16 +126,5 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             return (_clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        //TODO
-        /* public ClientDTO? AuthenticateUser(UserDTO user)
-        {
-            var usuario = _repository.GetClientByEmail(user);
-
-            if (usuario != null && BCrypt.Net.BCrypt.Verify(user.Password, usuario.Password))
-            {
-                return _mapper.Map<ClientDTO>(usuario);
-            }
-            return null;
-        } */
     }
 }

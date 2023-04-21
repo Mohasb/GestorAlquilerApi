@@ -1,5 +1,6 @@
-using System;
+using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
@@ -13,6 +14,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult LoginUser(UserDTO user)
+        {
+            return _loginService.Login(user);
         }
     }
 }
