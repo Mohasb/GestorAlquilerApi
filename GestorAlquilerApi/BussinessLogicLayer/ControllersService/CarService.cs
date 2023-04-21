@@ -13,13 +13,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IMapper _mapper;
         private readonly DbSet<Car> _cars;
         private readonly ISaveData<Car> _saveData;
-
-        public CarService(IQueryCar repository, IMapper mapper, ISaveData<Car> saveData)
+        private readonly IQueryPlanning _planning;
+        public CarService(IQueryCar repository, IMapper mapper, ISaveData<Car> saveData, IQueryPlanning planning)
         {
             _repository = repository;
             _mapper = mapper;
             _cars = _repository.GetDataCars();
             _saveData = saveData;
+            _planning = planning;
         }
 
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllElements()
@@ -110,7 +111,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             //Here is addedd a this car to availables in planning
             //TODO: This is not working
-            //AddCarToAvaildables(carDTO);
+            AddCarToAvaildables(carDTO);
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
@@ -130,7 +131,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _repository.Remove(car);
             //Delete car from availables planning
             //TODO: This is not working
-            //RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
+            RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
             await _saveData.SaveChangesAsync();
 
             return NoContent();
@@ -142,25 +143,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         //TODO: add this method
-        /* private async void AddCarToAvaildables(CarDTO carDTO)
+        private async void AddCarToAvaildables(CarDTO carDTO)
         {
-            var planning = _repository.GetDataPlanning(carDTO);
 
-            foreach (var plan in planning)
+            var car = _mapper.Map<Car>(carDTO);
+
+
+            var planning = _planning.PlanningCarCategory(car);
+
+            foreach (var day in planning)
             {
-                plan.CarsAvailables++;
+                day.CarsAvailables++;
             }
-            await _repository.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
         }
 
         private async void RemoveCarFromAvaildables(CarDTO carDTO)
         {
-            var planning = _repository.GetDataPlanning(carDTO);
+            var car = _mapper.Map<Car>(carDTO);
+            var planning = _planning.PlanningCarCategory(car);
             foreach (var plan in planning)
             {
                 plan.CarsAvailables--;
             }
-            await _repository.SaveChangesAsync();
-        } */
+            await _saveData.SaveChangesAsync();
+        }
     }
 }

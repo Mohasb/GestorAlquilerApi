@@ -1,4 +1,5 @@
-﻿using GestorAlquilerApi.BussinessLogicLayer.Models;
+﻿using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -19,5 +20,10 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         public void AddPlanning(Planning planning) => _context.Add(planning);
 
         public void Remove(Planning planning) => _context.Remove(planning);
+
+        public IQueryable<Planning> PlanningCarCategory(Car carDTO)
+        => from p in _context.Planning
+            where p.CarCategory == carDTO.Category && p.BranchId == carDTO.BranchId
+            select p;
     }
 }
