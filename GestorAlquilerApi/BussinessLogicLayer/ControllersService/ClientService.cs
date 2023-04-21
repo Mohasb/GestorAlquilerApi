@@ -91,6 +91,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             var client = _mapper.Map<Client>(clientDTO);
             client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
+            client.ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword(client.ConfirmationPassword);
 
             if (_clients == null)
             {
