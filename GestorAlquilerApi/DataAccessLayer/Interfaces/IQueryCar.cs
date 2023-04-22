@@ -7,7 +7,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
     public interface IQueryCar
     {
         public DbSet<Car> GetDataCars();
-        public IQueryable<Planning> GetDataPlanning(CarDTO carDTO);
         public void Remove(Car car);
         public void AddCar(Car car);
     }

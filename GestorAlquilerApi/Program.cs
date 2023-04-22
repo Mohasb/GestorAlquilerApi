@@ -33,12 +33,14 @@ builder.Services.AddScoped(typeof(IGenericService<ReservationDTO>), typeof(Reser
 builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
 
 //Dependency injection for Data Acces Layer
-builder.Services.AddScoped(typeof(IPermuteData<Branch>), typeof(PermuteData<Branch>));
-builder.Services.AddScoped(typeof(IPermuteData<Car>), typeof(PermuteData<Car>));
-builder.Services.AddScoped(typeof(IPermuteData<Client>), typeof(PermuteData<Client>));
-builder.Services.AddScoped(typeof(IPermuteData<Planning>), typeof(PermuteData<Planning>));
-builder.Services.AddScoped(typeof(IPermuteData<Reservation>), typeof(PermuteData<Reservation>));
+builder.Services.AddScoped(typeof(ISaveData<Branch>), typeof(SaveData<Branch>));
+builder.Services.AddScoped(typeof(ISaveData<Car>), typeof(SaveData<Car>));
+builder.Services.AddScoped(typeof(ISaveData<Client>), typeof(SaveData<Client>));
+builder.Services.AddScoped(typeof(ISaveData<Planning>), typeof(SaveData<Planning>));
+builder.Services.AddScoped(typeof(ISaveData<Reservation>), typeof(SaveData<Reservation>));
 
+//////////
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -11,15 +11,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
     public class BranchesServices<BranchDTO> : ControllerBase, IGenericService<BranchDTO>
     {
         private readonly IQueryBranch _repository;
-        private readonly IPermuteData<Branch> _permuteData;
+        private readonly ISaveData<Branch> _saveData;
         private readonly IMapper _mapper;
         private readonly DbSet<Branch> _branches;
-        public BranchesServices(IQueryBranch repository, IMapper mapper, IPermuteData<Branch> permuteData)
+
+        public BranchesServices(IQueryBranch repository, IMapper mapper, ISaveData<Branch> saveData)
         {
             _repository = repository;
             _mapper = mapper;
             _branches = _repository.GetDataBranches();
-            _permuteData = permuteData;
+            _saveData = saveData;
         }
 
         public async Task<ActionResult<IEnumerable<BranchDTO>>> GetAllElements()
@@ -31,10 +32,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var countBranches = (from b in _branches select b).Count();
 
-             if (!Convert.ToBoolean(countBranches))
-                return NotFound("There are no Branches"); 
+            if (!Convert.ToBoolean(countBranches))
+                return NotFound("There are no Branches");
 
-     
             var branchesDTO = _branches.Select(b => _mapper.Map<BranchDTO>(b));
 
             return await branchesDTO.ToListAsync();
@@ -45,13 +45,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (_branches == null)
             {
                 return NotFound();
-            } 
+            }
             var branch = await _branches.FindAsync(id);
 
             if (branch == null)
             {
                 return NotFound($"There are no branch with id: {id}");
-            } 
+            }
 
             var branchDTO = _mapper.Map<BranchDTO>(branch);
 
@@ -66,19 +66,20 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (id != branch.Id)
             {
                 return BadRequest();
-            } 
+            }
 
-            _permuteData.ModifiedState(branch);
+            _saveData.ModifiedState(branch);
 
-                await _permuteData.SaveChangesAsync();
+            //TODO
             try
             {
+                await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!BranchExists(id))
                 {
-                    return NotFound($"There are no branch with id: {id}");
+                    return BadRequest($"There are no branch with id: {id}");
                 }
                 else
                 {
@@ -86,7 +87,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
 
-            return NoContent(); 
+            return NoContent();
         }
 
         public async Task<ActionResult<BranchDTO>> AddElement(BranchDTO branchDTO)
@@ -100,7 +101,20 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.AddBranch(branch);
 
-            await _permuteData.SaveChangesAsync();
+            try
+            {
+                await _saveData.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                {
+                    return BadRequest(
+                        $"Problem adding element. There is already an element with Cif = '{branch.Cif}'."
+                    );
+                }
+            }
+
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
@@ -116,11 +130,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             if (branch == null)
             {
-                return NotFound();
-            } 
+                return NotFound($"There are no branch with id: {id}");
+            }
 
             _repository.Remove(branch);
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
 
             return NoContent();
         }
@@ -150,7 +164,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     );
                     _repository.AddPlanning(plan);
 
-                    await _permuteData.SaveChangesAsync();
+                    await _saveData.SaveChangesAsync();
                 }
             }
         }

@@ -1,0 +1,10 @@
+validacion como en car categories
+misma reserva con miscoche diferente fecha
+
+
+
+
+
+dotnet ef migrations add InitialCreate -o .\DataAccessLayer\Migrations
+dotnet ef database update
+dotnet watch

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -13,14 +12,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryCar _repository;
         private readonly IMapper _mapper;
         private readonly DbSet<Car> _cars;
-        private readonly IPermuteData<Car> _permuteData;
-
-        public CarService(IQueryCar repository, IMapper mapper, IPermuteData<Car> permuteData)
+        private readonly ISaveData<Car> _saveData;
+        private readonly IQueryPlanning _planning;
+        public CarService(IQueryCar repository, IMapper mapper, ISaveData<Car> saveData, IQueryPlanning planning)
         {
             _repository = repository;
             _mapper = mapper;
             _cars = _repository.GetDataCars();
-            _permuteData = permuteData;
+            _saveData = saveData;
+            _planning = planning;
         }
 
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetAllElements()
@@ -67,11 +67,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest();
             }
 
-            _permuteData.ModifiedState(car);
+            _saveData.ModifiedState(car);
 
             try
             {
-                await _permuteData.SaveChangesAsync();
+                await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -96,22 +96,46 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return Problem("Entity set 'ApiContext.Car'  is null.");
             }
-            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
 
+
+            try
+            {
+            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
             if (!valuesAsArray.Contains(car.Category))
             {
                 return Problem(
                     $"Category '{car.Category}' is invalid. It has to be in: '{string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[valuesAsArray.Length - 1]}'"
                 );
             }
-
             _repository.AddCar(car);
 
-            await _permuteData.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
+
+                
+            }
+            catch (DbUpdateException ex)
+            {
+
+                var barrr = ex;
+
+
+
+                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                {
+                    return BadRequest(
+                        $"Problem adding element. There is already an element with Cif = ''."
+                    );
+                }
+            }
+
+
+
+
+
 
             //Here is addedd a this car to availables in planning
             //TODO: This is not working
-            //AddCarToAvaildables(carDTO);
+            AddCarToAvaildables(carDTO);
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
@@ -131,8 +155,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _repository.Remove(car);
             //Delete car from availables planning
             //TODO: This is not working
-            //RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
-            await _permuteData.SaveChangesAsync();
+            RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
+            await _saveData.SaveChangesAsync();
 
             return NoContent();
         }
@@ -143,25 +167,30 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         //TODO: add this method
-        /* private async void AddCarToAvaildables(CarDTO carDTO)
+        private async void AddCarToAvaildables(CarDTO carDTO)
         {
-            var planning = _repository.GetDataPlanning(carDTO);
 
-            foreach (var plan in planning)
+            var car = _mapper.Map<Car>(carDTO);
+
+
+            var planning = _planning.PlanningCarCategory(car);
+
+            foreach (var day in planning)
             {
-                plan.CarsAvailables++;
+                day.CarsAvailables++;
             }
-            await _repository.SaveChangesAsync();
+            await _saveData.SaveChangesAsync();
         }
 
         private async void RemoveCarFromAvaildables(CarDTO carDTO)
         {
-            var planning = _repository.GetDataPlanning(carDTO);
+            var car = _mapper.Map<Car>(carDTO);
+            var planning = _planning.PlanningCarCategory(car);
             foreach (var plan in planning)
             {
                 plan.CarsAvailables--;
             }
-            await _repository.SaveChangesAsync();
-        } */
+            await _saveData.SaveChangesAsync();
+        }
     }
 }

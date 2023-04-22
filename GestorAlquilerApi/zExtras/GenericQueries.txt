@@ -1,0 +1,30 @@
+using GestorAlquilerApi.DataAccessLayer.Data;
+using GestorAlquilerApi.DataAccessLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace GestorAlquilerApi.DataAccessLayer.Repository
+{
+    public class GenericQueries<T> : IGenericQuery<T>
+        where T : class
+    {
+        private readonly ApiContext _context;
+
+        public GenericQueries(ApiContext context)
+        {
+            _context = context;
+        }
+
+        public IQueryable<T> GetAllElements()
+        {
+            return _context.Set<T>();
+        }
+        public T AddElement(T element)
+        {
+            return _context.Add<T>(element);
+        }
+        public T RemoveElement(T element)
+        {
+            _context.Remove(element);
+        }
+    }
+}

@@ -16,12 +16,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         }
 
         public DbSet<Car> GetDataCars() => _context.Car;
-
-        public IQueryable<Planning> GetDataPlanning(CarDTO carDTO) =>
-            from p in _context.Planning
-            where p.CarCategory == carDTO.Category && p.BranchId == carDTO.BranchId
-            select p;
-
         public void AddCar(Car car) => _context.Add(car);
         public void Remove(Car car) => _context.Remove(car);
 
