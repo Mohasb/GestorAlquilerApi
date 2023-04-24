@@ -102,10 +102,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             ReservationDTO reservationDTO
         )
         {
-            if (_reservations == null)
-            {
-                return Problem("Entity set 'ApiContext.Reservation'  is null.");
-            }
+            //if (_reservations == null)
+            //{
+            //    return Problem("Entity set 'ApiContext.Reservation'  is null.");
+            //}
 
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
@@ -127,18 +127,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     $"there is no customer with id = {reservation.ClientId}"
                 );
             }
-            //check branchid
-            //check clientid
 
 
 
 
-            _repository.AddReservation(reservation);
+            _repository.AddReservation(reservation); 
 
             try
             {
-
-                //Aqi
                 await _saveData.SaveChangesAsync();
 
             }catch
@@ -147,7 +143,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
 
-
+            //aqui comprobar todo
             RemoveCarFromAvailable(reservation);
 
             return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
