@@ -43,7 +43,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                        && p.BranchId == branchId
                        group p by p.CarCategory;
 
-            List<Car> cars = new List<Car>();
+            List<Car> cars = new();
 
             foreach (var group in data)
             {

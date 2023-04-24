@@ -18,7 +18,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 
         // GET: api/Cars
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetCar() =>
             await _carsService.GetAllElements();
 

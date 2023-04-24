@@ -3,8 +3,4 @@ dotnet ef database update
 dotnet watch
 
 
-
--EDAD DEL CONDUCTOR
-
-
--comprobar si coches disponibles sean mayor que 0 en custom
+Seeder no hace planning

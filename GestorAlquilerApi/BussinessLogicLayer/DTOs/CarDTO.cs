@@ -8,9 +8,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         A,
         B,
         C,
-        D,
-        E,
-        F
+        D
     }
 
     public class CarDTO
