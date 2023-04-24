@@ -164,8 +164,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.Property<int>("BranchId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CarId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("CarCategory")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
@@ -179,8 +179,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
-
-                    b.HasIndex("CarId");
 
                     b.HasIndex("ClientId");
 
@@ -217,12 +215,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestorAlquilerApi.BussinessLogicLayer.Models.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GestorAlquilerApi.BussinessLogicLayer.Models.Client", "Client")
                         .WithMany("Reservations")
                         .HasForeignKey("ClientId")
@@ -230,8 +222,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
-
-                    b.Navigation("Car");
 
                     b.Navigation("Client");
                 });

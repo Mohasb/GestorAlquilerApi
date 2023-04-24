@@ -50,7 +50,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             if (client == null)
             {
-                return Problem($"There are no Client with id:{id}");
+                return Problem($"There is no Client with id:{id}");
             }
             var clientDto = _mapper.Map<ClientDTO>(client);
 
@@ -91,7 +91,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             var client = _mapper.Map<Client>(clientDTO);
             client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
-            client.ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword(client.ConfirmationPassword);
+            if (client.Password != client.ConfirmationPassword)
+            {
+                return Problem("The passwors doesn´t match");
+            }
+                client.ConfirmationPassword = client.Password;
 
             if (_clients == null)
             {

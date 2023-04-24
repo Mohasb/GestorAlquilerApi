@@ -33,8 +33,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (!Convert.ToBoolean(_cars.Count()))
                 return NotFound("There are no Cars");
 
-            var data = _cars;
-            var cars = data.Select(c => _mapper.Map<CarDTO>(c));
+            var cars = _cars.Select(c => _mapper.Map<CarDTO>(c));
 
             return await cars.ToListAsync();
         }
@@ -100,42 +99,42 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             try
             {
-            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
-            if (!valuesAsArray.Contains(car.Category))
-            {
-                return Problem(
-                    $"Category '{car.Category}' is invalid. It has to be in: '{string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[valuesAsArray.Length - 1]}'"
-                );
-            }
-            _repository.AddCar(car);
+                var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
+                if (!valuesAsArray.Contains(car.Category))
+                {
+                    return BadRequest(
+                        $"Category '{car.Category}' is invalid. It has to be in: {string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[^1]}"
+                    );
+                }
+                _repository.AddCar(car);
 
-            await _saveData.SaveChangesAsync();
+                await _saveData.SaveChangesAsync();
 
-                
+
             }
             catch (DbUpdateException ex)
             {
 
-                var barrr = ex;
-
-
-
-                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("UNIQUE"))
                 {
                     return BadRequest(
-                        $"Problem adding element. There is already an element with Cif = ''."
+                        $"Problem adding car. There is already a car with Registration = {car.Registration}."
+                    );
+                }
+                else if (ex.InnerException != null && ex.InnerException.Message.Contains("FOREIGN"))
+                {
+                    return BadRequest(
+                        $"Problem adding car. The branch = {car.BranchId} is not correct."
                     );
                 }
             }
-
-
-
-
-
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
 
             //Here is addedd a this car to availables in planning
-            //TODO: This is not working
-            AddCarToAvaildables(carDTO);
+            AvailibilityCar(carDTO, "add");
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
@@ -154,8 +153,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.Remove(car);
             //Delete car from availables planning
-            //TODO: This is not working
-            RemoveCarFromAvaildables(_mapper.Map<CarDTO>(car));
+            AvailibilityCar(_mapper.Map<CarDTO>(car), "remove");
             await _saveData.SaveChangesAsync();
 
             return NoContent();
@@ -165,30 +163,24 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private bool CarExists(int id)
         {
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-        //TODO: add this method
-        private async void AddCarToAvaildables(CarDTO carDTO)
+        }        
+        private async void AvailibilityCar(CarDTO carDTO, string operation)
         {
-
             var car = _mapper.Map<Car>(carDTO);
-
-
             var planning = _planning.PlanningCarCategory(car);
+
+
 
             foreach (var day in planning)
             {
-                day.CarsAvailables++;
-            }
-            await _saveData.SaveChangesAsync();
-        }
-
-        private async void RemoveCarFromAvaildables(CarDTO carDTO)
-        {
-            var car = _mapper.Map<Car>(carDTO);
-            var planning = _planning.PlanningCarCategory(car);
-            foreach (var plan in planning)
-            {
-                plan.CarsAvailables--;
+                if (operation == "add")
+                {
+                    day.CarsAvailables++;
+                }
+                else
+                {
+                    day.CarsAvailables--;
+                }
             }
             await _saveData.SaveChangesAsync();
         }

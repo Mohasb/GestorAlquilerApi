@@ -14,8 +14,14 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             _context = context;
         }
         
-        public void ModifiedState(T data) =>
-            _context.Entry(data).State = EntityState.Modified;
+        public void ModifiedState(T data)
+        {
+            if (data != null )
+            {
+                _context.Entry(data).State = EntityState.Modified;
+            }
+
+        }
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
     }

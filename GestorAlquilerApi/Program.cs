@@ -41,6 +41,8 @@ builder.Services.AddScoped(typeof(ISaveData<Reservation>), typeof(SaveData<Reser
 
 //////////
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ISetAdminService, SetAdminService>();
+
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -13,7 +13,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
     public class LoginService : ControllerBase, ILoginService
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IQueryClient _repository;
 
@@ -35,7 +35,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         }
         public IActionResult Login(UserDTO user)
         {
-            IActionResult response = Unauthorized();
+            IActionResult response;
             var _user = CheckUserEmailPassword(user);
 
             if (_user != null)

@@ -30,9 +30,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return NotFound();
             }
 
-            var countBranches = (from b in _branches select b).Count();
-
-            if (!Convert.ToBoolean(countBranches))
+            if (!Convert.ToBoolean(_branches.Count()))
                 return NotFound("There are no Branches");
 
             var branchesDTO = _branches.Select(b => _mapper.Map<BranchDTO>(b));
@@ -50,7 +48,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             if (branch == null)
             {
-                return NotFound($"There are no branch with id: {id}");
+                return NotFound($"There is no branch with id: {id}");
             }
 
             var branchDTO = _mapper.Map<BranchDTO>(branch);
@@ -79,7 +77,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 if (!BranchExists(id))
                 {
-                    return BadRequest($"There are no branch with id: {id}");
+                    return BadRequest($"There is no branch with id: {id}");
                 }
                 else
                 {
@@ -107,11 +105,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("UNIQUE constraint failed"))
                 {
                     return BadRequest(
-                        $"Problem adding element. There is already an element with Cif = '{branch.Cif}'."
+                        $"Problem adding Branch. There is already an Branch with Cif = '{branch.Cif}'."
                     );
+
                 }
             }
 
@@ -130,7 +129,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             if (branch == null)
             {
-                return NotFound($"There are no branch with id: {id}");
+                return NotFound($"There is no branch with id: {id}");
             }
 
             _repository.Remove(branch);

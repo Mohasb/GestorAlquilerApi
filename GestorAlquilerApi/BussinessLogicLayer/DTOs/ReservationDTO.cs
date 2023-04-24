@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
@@ -22,6 +21,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         public int ClientId { get; set; }
 
         [Required(ErrorMessage = "The field 'CarId' is required")]
-        public int CarId { get; set; }
+        public string? CarCategory { get; set; }
     }
 }

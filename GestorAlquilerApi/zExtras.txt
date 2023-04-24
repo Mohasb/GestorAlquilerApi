@@ -1,8 +1,8 @@
-validacion como en car categories
+
 misma reserva con miscoche diferente fecha
 
 
-
+POST RESERVATION && PUT RESERVATION
 
 
 dotnet ef migrations add InitialCreate -o .\DataAccessLayer\Migrations

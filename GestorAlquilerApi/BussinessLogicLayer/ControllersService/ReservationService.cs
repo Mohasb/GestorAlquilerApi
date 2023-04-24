@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -12,15 +11,29 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
     {
         private readonly IQueryReservation _repository;
         private readonly IMapper _mapper;
-        private readonly DbSet<Reservation> _reservations;
         private readonly ISaveData<Reservation> _saveData;
+        private readonly DbSet<Reservation> _reservations;
+        //
+        private readonly IQueryBranch _brachesRepo;
+        private readonly DbSet<Branch> _branches;
+        //
+        private readonly IQueryClient _clientRepo;
+        private readonly DbSet<Client> _clients;
 
-        public ReservationService(IQueryReservation repository, IMapper mapper, ISaveData<Reservation> saveData)
+
+        public ReservationService(IQueryReservation repository, IMapper mapper, ISaveData<Reservation> saveData, IQueryBranch brachesRepo, IQueryClient clientRepo)
         {
             _repository = repository;
             _mapper = mapper;
-            _reservations = _repository.GetDataReservation();
             _saveData = saveData;
+            //
+            _reservations = _repository.GetDataReservation();
+            //
+            _brachesRepo = brachesRepo;
+            _branches = _brachesRepo.GetDataBranches();
+            //
+            _clientRepo = clientRepo;
+            _clients = _clientRepo.GetDataClients();
         }
 
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllElements()
@@ -96,8 +109,44 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
+            //Validate DTO
+            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
+            if (!valuesAsArray.Contains(reservation.CarCategory))
+            {
+                return BadRequest(
+                    $"Category '{reservation.CarCategory}' is invalid. It has to be in: {string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[^1]}"
+                );
+            }else if(await _branches.FindAsync(reservation.BranchId) == null)
+            {
+                return BadRequest(
+                    $"there is no branch with id = {reservation.ClientId}"
+                );
+            }else if (await _clients.FindAsync(reservation.ClientId) == null)
+            {
+                return BadRequest(
+                    $"there is no customer with id = {reservation.ClientId}"
+                );
+            }
+            //check branchid
+            //check clientid
+
+
+
+
             _repository.AddReservation(reservation);
-            await _saveData.SaveChangesAsync();
+
+            try
+            {
+
+                //Aqi
+                await _saveData.SaveChangesAsync();
+
+            }catch
+            {
+                return Problem();
+            }
+
+
 
             RemoveCarFromAvailable(reservation);
 
