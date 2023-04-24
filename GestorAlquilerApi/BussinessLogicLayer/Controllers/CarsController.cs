@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
@@ -17,7 +18,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 
         // GET: api/Cars
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<CarDTO>>> GetCar() =>
             await _carsService.GetAllElements();
 

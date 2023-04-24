@@ -90,12 +90,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         public async Task<ActionResult<ClientDTO>> AddElement(ClientDTO clientDTO)
         {
             var client = _mapper.Map<Client>(clientDTO);
-            client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
             if (client.Password != client.ConfirmationPassword)
             {
                 return Problem("The passwors doesn´t match");
             }
-                client.ConfirmationPassword = client.Password;
+            client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
+            client.ConfirmationPassword = client.Password;
 
             if (_clients == null)
             {
