@@ -105,12 +105,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException != null && ex.InnerException.Message.Contains("UNIQUE constraint failed"))
+                if (
+                    ex.InnerException != null
+                    && ex.InnerException.Message.Contains("UNIQUE constraint failed")
+                )
                 {
                     return BadRequest(
                         $"Problem adding Branch. There is already an Branch with Cif = '{branch.Cif}'."
                     );
-
                 }
             }
 
@@ -155,7 +157,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     var plan = _mapper.Map<Planning>(
                         new PlanningDTO
                         {
-                            Day = DateTime.Now.AddDays(i).ToString(),
+                            Day = DateTime.Now.Date.AddDays(i).ToString(),
                             CarsAvailables = 0,
                             CarCategory = categori.ToString(),
                             BranchId = branch.Id

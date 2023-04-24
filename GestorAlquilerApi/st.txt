@@ -1,69 +1,3 @@
-public async Task<ActionResult<ReservationDTO>> AddElement(ReservationDTO reservationDTO)
-        {
-            if (_reservations == null)
-            {
-                return Problem("Entity set 'ApiContext.Reservation'  is null.");
-            }
-
-            var reservation = _mapper.Map<Reservation>(reservationDTO);
-
-            //Validate DTO
-            var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
-            if (!valuesAsArray.Contains(reservation.CarCategory))
-            {
-                return BadRequest(
-                    $"Category '{reservation.CarCategory}' is invalid. It has to be in: {string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[^1]}"
-                );
-            }
-            //Validate branchId
-            else if (await _branches.FindAsync(reservation.BranchId) == null)
-            {
-                return BadRequest($"there is no branch with id = {reservation.BranchId}");
-            }
-            //Validate clientId
-            else if (await _clients.FindAsync(reservation.ClientId) == null)
-            {
-                return BadRequest($"there is no customer with id = {reservation.ClientId}");
-            }
-            //Validate Dates
-            else if (reservation.StartDate < DateTime.Now)
-            {
-                return BadRequest($"The StartDate must be greater than {DateTime.Now}.");
-            }
-            else if (reservation.StartDate > reservation.EndDate)
-            {
-                return BadRequest($"The End Date must be greater than Start Date.");
-            }
-            else if (reservation.EndDate < reservation.StartDate)
-            {
-                return BadRequest($"The End Date must be greater than start Date.");
-            }
-            else
-            {
-                if (AreCarsAvailables(reservation))
-                {
-                    try
-                    {
-                        RemoveCarFromAvailable(reservation);
-                        _repository.AddReservation(reservation);
-                        await _saveData.SaveChangesAsync();
-                        return reservationDTO;
-                    }
-                    catch
-                    {
-                        return Problem("problem in adding reservation");
-                    }
-                }
-                else
-                {
-                    return BadRequest("There are no available cars");
-                }
-            }
-        }
-
-
-
-
 
 
 
@@ -82,10 +16,7 @@ public async Task<ActionResult<ReservationDTO>> AddElement(ReservationDTO reserv
             await _saveData.SaveChangesAsync(); 
         }
 
-        private bool AreCarsAvailables(Reservation reservation)
-        {
-            return _repository.CheckAvailabilityCars(reservation);
-        }
+        
 
 
 
