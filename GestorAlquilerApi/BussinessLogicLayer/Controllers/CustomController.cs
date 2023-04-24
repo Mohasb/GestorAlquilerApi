@@ -12,11 +12,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     {
         private readonly ISetAdminService _setUserAdminService;
         private readonly ILoginService _loginService;
+        private readonly ICustomService _customService;
 
-        public CustomController(ISetAdminService setUserAdminService, ILoginService loginService)
+        public CustomController(ISetAdminService setUserAdminService, ILoginService loginService, ICustomService customService)
         {
             _setUserAdminService = setUserAdminService;
             _loginService = loginService;
+            _customService = customService;//Aqui em`pieza las custom request----->
         }
 
         [HttpPut("setAdmin/{email}")]
