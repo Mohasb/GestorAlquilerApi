@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestorAlquilerApi.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230424112342_InitialCreate")]
+    [Migration("20230424115229_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

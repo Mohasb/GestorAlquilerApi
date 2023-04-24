@@ -33,5 +33,17 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             bool isAvailableAllDays = data.All(p => p.CarsAvailables > 0);
             return isAvailableAllDays;
         }
+
+        public IQueryable<Planning> GetReservationData(Reservation reservation)
+        {
+            var data = from p in _context.Planning
+                where
+                    p.BranchId == reservation.BranchId
+                    && p.CarCategory == reservation.CarCategory
+                    && p.Day >= reservation.StartDate.Date
+                    && p.Day <= reservation.EndDate.Date
+                select p;
+                return data;
+        }
     }
 }
