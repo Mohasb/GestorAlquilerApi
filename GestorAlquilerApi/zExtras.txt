@@ -1,10 +1,7 @@
-
-misma reserva con miscoche diferente fecha
-
-
-POST RESERVATION && PUT RESERVATION
-
-
 dotnet ef migrations add InitialCreate -o .\DataAccessLayer\Migrations
 dotnet ef database update
 dotnet watch
+
+
+
+-EDAD DEL CONDUCTOR
