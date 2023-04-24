@@ -14,7 +14,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _planning = planning;
         }
 
-        public IQueryable<Car> GetAvailablesCars(int branchId, DateTime startDate, DateTime endDate, int age) { 
+        public List<Car> GetAvailablesCars(int branchId, DateTime startDate, DateTime endDate, int age) { 
             return _planning.GetCarsAvailables(branchId, startDate, endDate, age);
         }
     }

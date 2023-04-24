@@ -7,6 +7,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
 {
     public interface ICustomService
     {
-        IQueryable<Car> GetAvailablesCars(int branchId, DateTime startDate, DateTime endDate, int age);
+        List<Car> GetAvailablesCars(int branchId, DateTime startDate, DateTime endDate, int age);
     }
 }

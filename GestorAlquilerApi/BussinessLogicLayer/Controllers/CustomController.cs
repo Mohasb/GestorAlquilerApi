@@ -43,7 +43,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         }
 
         [HttpGet("getCarsAvailables/{branchId}/{startDate}/{endDate}/{age}")]
-        public IQueryable<Car> GetAvailablesCars(
+        public List<Car> GetAvailablesCars(
             int branchId,
             DateTime startDate,
             DateTime endDate,

@@ -28,7 +28,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             where p.CarCategory == carDTO.Category && p.BranchId == carDTO.BranchId
             select p;
 
-        public IQueryable<Car> GetCarsAvailables(
+        public List<Car> GetCarsAvailables(
             int branchId,
             DateTime startDate,
             DateTime endDate,
@@ -37,23 +37,47 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         {
 
 
+            var data = from p in _context.Planning
+                       where p.Day >= startDate
+                       && p.Day <= endDate
+                       && p.BranchId == branchId
+                       group p by p.CarCategory;
 
+            List<Car> cars = new List<Car>();
 
-            var cars = (
-                from p in _context.Planning
-                from b in _context.Branch
-                from c in _context.Car
-                where
-                    p.BranchId == b.Id
-                    && p.BranchId == branchId
-                    && p.Day >= startDate
-                    && p.Day <= endDate
-                    && c.BranchId == branchId
-                select c
-            ).GroupBy(c => c.Category).Select(c => c.First());
+            foreach (var group in data)
+            {
+                if (group.All(d => d.CarsAvailables > 0))
+                {
+                    // Obtiene los coches del branch correspondiente
+                    var branchCars = _context.Car.Where(c => c.BranchId == branchId);
+
+                    // Filtra los coches por categoría
+                    var filteredCars = branchCars.Where(c => c.Category == group.Key);
+
+                    // Agrega los coches filtrados a la lista de coches
+                    cars.AddRange(filteredCars);
+                }
+            }
 
 
             return cars;
+
+            //var cars = (
+            //    from p in _context.Planning
+            //    from b in _context.Branch
+            //    from c in _context.Car
+            //    where
+            //        p.BranchId == b.Id
+            //        && p.BranchId == branchId
+            //        && p.Day >= startDate
+            //        && p.Day <= endDate
+            //        && c.BranchId == branchId
+            //    select c
+            //).GroupBy(c => c.Category).Select(c => c.First());
+
+
+            //return cars;
         }
     }
 }

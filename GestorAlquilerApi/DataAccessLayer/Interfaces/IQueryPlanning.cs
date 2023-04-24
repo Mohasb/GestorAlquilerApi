@@ -11,6 +11,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
         public void Remove(Planning planning);
         public void AddPlanning(Planning planning);
         public IQueryable<Planning> PlanningCarCategory(Car car);
-        public IQueryable<Car> GetCarsAvailables(int branchId, DateTime startDate, DateTime endDate, int age);
+        public List<Car> GetCarsAvailables(int branchId, DateTime startDate, DateTime endDate, int age);
     }
 }
