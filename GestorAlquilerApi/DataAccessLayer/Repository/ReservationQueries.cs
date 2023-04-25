@@ -20,18 +20,30 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
 
         public void Remove(Reservation reservation) => _context.Remove(reservation);
 
-        public IQueryable<Planning> GetReservationCars(Reservation reservation) =>
-            (
+        public bool CheckAvailabilityCars(Reservation reservation)
+        {
+            var data =
                 from p in _context.Planning
-                from b in _context.Branch
-                from c in _context.Car
+                where p.BranchId == reservation.BranchId
+                && p.CarCategory == reservation.CarCategory
+                && p.Day >= reservation.StartDate.Date
+                && p.Day <= reservation.EndDate.Date
+                select p;
+
+            bool isAvailableAllDays = data.All(p => p.CarsAvailables > 0);
+            return isAvailableAllDays;
+        }
+
+        public IQueryable<Planning> GetReservationData(Reservation reservation)
+        {
+            var data = from p in _context.Planning
                 where
-                    p.BranchId == b.Id
-                    && p.BranchId == reservation.BranchId
-                    && p.CarCategory == c.Category
+                    p.BranchId == reservation.BranchId
+                    && p.CarCategory == reservation.CarCategory
                     && p.Day >= reservation.StartDate.Date
-                    && p.Day < reservation.EndDate
-                select p
-            ).Distinct();
+                    && p.Day <= reservation.EndDate.Date
+                select p;
+                return data;
+        }
     }
 }

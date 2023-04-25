@@ -8,6 +8,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
         public DbSet<Reservation> GetDataReservation();
         public void Remove(Reservation reservation);
         public void AddReservation(Reservation reservation);
-        public IQueryable<Planning> GetReservationCars(Reservation reservation);
+
+        public bool CheckAvailabilityCars(Reservation reservation);
+        public IQueryable<Planning> GetReservationData(Reservation reservation);
     }
 }

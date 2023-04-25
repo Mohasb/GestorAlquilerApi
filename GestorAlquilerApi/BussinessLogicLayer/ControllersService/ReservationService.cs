@@ -98,14 +98,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return NoContent();
         }
 
-        public async Task<ActionResult<ReservationDTO>> AddElement(
-            ReservationDTO reservationDTO
-        )
+        public async Task<ActionResult<ReservationDTO>> AddElement(ReservationDTO reservationDTO)
         {
-            //if (_reservations == null)
-            //{
-            //    return Problem("Entity set 'ApiContext.Reservation'  is null.");
-            //}
+            if (_reservations == null)
+            {
+                return Problem("Entity set 'ApiContext.Reservation'  is null.");
+            }
 
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
@@ -116,37 +114,51 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest(
                     $"Category '{reservation.CarCategory}' is invalid. It has to be in: {string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[^1]}"
                 );
-            }else if(await _branches.FindAsync(reservation.BranchId) == null)
-            {
-                return BadRequest(
-                    $"there is no branch with id = {reservation.ClientId}"
-                );
-            }else if (await _clients.FindAsync(reservation.ClientId) == null)
-            {
-                return BadRequest(
-                    $"there is no customer with id = {reservation.ClientId}"
-                );
             }
-
-
-
-
-            _repository.AddReservation(reservation); 
-
-            try
+            //Validate branchId
+            else if (await _branches.FindAsync(reservation.BranchId) == null)
             {
-                await _saveData.SaveChangesAsync();
-
-            }catch
-            {
-                return Problem();
+                return BadRequest($"there is no branch with id = {reservation.BranchId}");
             }
-
-
-            //aqui comprobar todo
-            RemoveCarFromAvailable(reservation);
-
-            return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
+            //Validate clientId
+            else if (await _clients.FindAsync(reservation.ClientId) == null)
+            {
+                return BadRequest($"there is no customer with id = {reservation.ClientId}");
+            }
+            //Validate Dates
+            else if (reservation.StartDate < DateTime.Now)
+            {
+                return BadRequest($"The StartDate must be greater than {DateTime.Now}.");
+            }
+            else if (reservation.StartDate > reservation.EndDate)
+            {
+                return BadRequest($"The End Date must be greater than Start Date.");
+            }
+            else if (reservation.EndDate < reservation.StartDate)
+            {
+                return BadRequest($"The End Date must be greater than start Date.");
+            }
+            else
+            {
+                if (AreCarsAvailables(reservation))
+                {
+                    try
+                    {
+                        RemoveCarFromAvailable(reservation);
+                        _repository.AddReservation(reservation);
+                        await _saveData.SaveChangesAsync();
+                        return reservationDTO;
+                    }
+                    catch
+                    {
+                        return Problem("problem in adding reservation");
+                    }
+                }
+                else
+                {
+                    return BadRequest("There are no available cars");
+                }
+            }
         }
 
         public async Task<IActionResult> RemoveElement(int id)
@@ -174,13 +186,18 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         private async void RemoveCarFromAvailable(Reservation reservation)
         {
-            var planning = _repository.GetReservationCars(reservation);
+            var planning = _repository.GetReservationData(reservation);
 
             foreach (var day in planning)
             {
                 day.CarsAvailables--;
             }
             await _saveData.SaveChangesAsync();
+        } 
+
+        private bool AreCarsAvailables(Reservation reservation)
+        {
+            return _repository.CheckAvailabilityCars(reservation);
         }
     }
 }
