@@ -27,11 +27,11 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
 
 
             //Sedder db
-            modelBuilder.Entity<Branch>().HasData(
-                new Branch { Id = 1, Cif = "C-124582", Name = "Centauro Car hire Benidorm", Population = "Benidorm", Country = "Spain", Address = "C. de Berlín, 2, 03503 Benidorm, Alicante" },
+            /* modelBuilder.Entity<Branch>().HasData(
+                new Branch { Id = 1, Cif = "C-124582", Name = "Centauro Car hire Benidorm", Population = "Benidorm", Country = "Spain", Address = "C. de Berlin, 2, 03503 Benidorm, Alicante" },
                 new Branch { Id = 2, Cif = "C-124625", Name = "Centauro Car hire Alicante airport", Population = "Alicante", Country = "Spain", Address = "Alicante Airport, 03195 Elx, Alicante" },
                 new Branch { Id = 3, Cif = "C-126385", Name = "Centauro Car Rental Torrevieja", Population = "Torrevieja", Country = "Spain", Address = "Av. de las Cortes Valencianas, 6, 03183 Torrevieja, Alicante" },
-                new Branch { Id = 4, Cif = "C-124758", Name = "Centauro Location voiture Lisbonne", Population = "Lisboa", Country = "Portugal", Address = "Av. Severiano Falcão 2, Prior Velho, 2685-378 Lisboa, Portugal" },
+                new Branch { Id = 4, Cif = "C-124758", Name = "Centauro Location voiture Lisbonne", Population = "Lisboa", Country = "Portugal", Address = "Av. Severiano Falcao 2, Prior Velho, 2685-378 Lisboa, Portugal" },
                 new Branch { Id = 5, Cif = "C-123485", Name = "Centauro Rent a Car Rome Airport Fiumicino", Population = "Roma", Country = "Italia", Address = "Via Portuense, 2483, 00054 Fiumicino RM, Italia" }
 
                 );
@@ -72,7 +72,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
                 new Client { Id = 1, Registration = "45113560A", Name="Muhammad", LastName = "Hicho Haidor", Email = "mh.haidor@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("12345"), ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword("12345"), PhoneNumber = 686601702, BankAccount = "1234Bank", Rol = "Admin" },
                 new Client { Id = 2, Registration = "45223659F", Name = "Jhon", LastName = "Doe", Email = "jhon.doe@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("12345"), ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword("12345"), PhoneNumber = 695632458, BankAccount = "1234Bank", Rol = "User" },
                 new Client { Id = 3, Registration = "45369875G", Name = "Jane", LastName = "Doe", Email = "jane.doe@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("12345"), ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword("12345"), PhoneNumber = 695632458, BankAccount = "1234Bank", Rol = "User" }
-                );
+                ); */
 
 
 
