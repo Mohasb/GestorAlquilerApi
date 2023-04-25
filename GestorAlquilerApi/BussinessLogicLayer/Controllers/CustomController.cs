@@ -4,6 +4,7 @@ using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
@@ -45,11 +46,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
             DateTime startDate,
             DateTime endDate,
             int age
-        ) 
+        )
         {
             var cars = _customService.GetAvailablesCars(branchId, startDate, endDate, age);
-            //return cars.Select(c => _mapper.Map<CarDTO>(cars));
             return cars;
         }
+        [HttpGet("carsByBranch/{branchId}")]
+        public List<CarDTO> GetCarsByBranch(int branchId)
+        {
+           return  _customService.GetCarsByBranch(branchId);
+        }
+
     }
 }
