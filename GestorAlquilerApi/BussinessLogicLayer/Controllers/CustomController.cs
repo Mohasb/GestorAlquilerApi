@@ -59,7 +59,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         }
 
         /// <summary>
-        /// Returns a Cars of a brnach by its id
+        /// Returns a Cars of a branch by its id
         /// </summary>
         [HttpGet("carsByBranch/{branchId}")]
         public List<CarDTO> GetCarsByBranch(int branchId)
