@@ -16,32 +16,56 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
             _repository = repository;
         }
 
+        /// <summary>
+        /// Returns a List of all Reservations
+        /// </summary>
         // GET: api/Reservations
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservation() =>
             await _repository.GetAllElements();
 
-        // GET: api/Reservations/5
+        /// <summary>
+        /// Returns a Reservation by its Id
+        /// </summary>
+        /// <param name="id">The id of the Reservation.</param>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     Get /api/Reservation/5
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the Reservation</response>
+        /// <response code="400">If there are no Reservation with that id</response>
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ReservationDTO>> GetReservation(int id) =>
             await _repository.GetElementById(id);
 
-        // PUT: api/Reservations/5
+        /// <summary>
+        /// Edit a Reservation by its Id
+        /// </summary>
+        /// <param name="id">The id of the Reservation.</param>
+        /// <param name="reservationDTO">Body of the new Reservation</param>
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutReservation(int id, ReservationDTO reservationDTO) =>
             await _repository.EditElement(id, reservationDTO);
 
-        // POST: api/Reservations
+        /// <summary>
+        /// Add a new Reservation
+        /// </summary>
+        /// <param name="reservationDTO">Body of the Reservation </param>
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ReservationDTO>> PostReservation(
             ReservationDTO reservationDTO
         ) => await _repository.AddElement(reservationDTO);
 
-        // DELETE: api/Reservations/5
+        /// <summary>
+        /// Delete a Reservation
+        /// </summary>
+        /// <param name="id">id of the Reservation to delete</param>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReservation(int id) =>

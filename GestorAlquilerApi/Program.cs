@@ -10,6 +10,7 @@ using GestorAlquilerApi.DataAccessLayer.Repository;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,8 +61,27 @@ builder.Services.AddSwaggerGen( options =>
     {
         Version = "v1",
         Title = "Api Gestion De Alquileres",
-        Description = "An ASP.NET Core Web API to carry out the management of branches, cars, clients and reservations in a car rental company"
+        Description = "An ASP.NET Core Web API to carry out the management of branches, cars, clients and reservations in a car rental company",
+        Contact = new OpenApiContact
+        {
+          Name = "Muhammad Hicho Haidor",
+          Email = "mh.haidor@gmail.com",
+          Url = new Uri("https://github.com/Mohasb")
+        }
     });  
+    // Set the comments path for the Swagger JSON and UI.
+         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+         options.IncludeXmlComments(xmlPath);
+
+
+
+
+
+
+
+
+
     //Add Security JWT to swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
     In = ParameterLocation.Header, 
