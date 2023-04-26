@@ -12,8 +12,22 @@ using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5173", "http://127.0.0.1:5173/")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+});
 
 //////////// Add services to the container.//////////////////
 
@@ -27,10 +41,16 @@ builder.Services.AddScoped<IQueryCar, CarQueries>();
 builder.Services.AddScoped(typeof(IGenericService<ClientDTO>), typeof(ClientService<ClientDTO>));
 builder.Services.AddScoped<IQueryClient, ClientQueries>();
 
-builder.Services.AddScoped(typeof(IGenericService<PlanningDTO>), typeof(PlanningService<PlanningDTO>));
+builder.Services.AddScoped(
+    typeof(IGenericService<PlanningDTO>),
+    typeof(PlanningService<PlanningDTO>)
+);
 builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();
 
-builder.Services.AddScoped(typeof(IGenericService<ReservationDTO>), typeof(ReservationService<ReservationDTO>));
+builder.Services.AddScoped(
+    typeof(IGenericService<ReservationDTO>),
+    typeof(ReservationService<ReservationDTO>)
+);
 builder.Services.AddScoped<IQueryReservation, ReservationQueries>();
 
 //Dependency injection for Data Acces Layer
@@ -47,79 +67,92 @@ builder.Services.AddScoped<ICustomService, CustomService>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 //DBContext
-builder.Services.AddDbContext<ApiContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("ApiContext") ?? throw new InvalidOperationException("Connection string 'ApiContext' not found.")));
+builder.Services.AddDbContext<ApiContext>(
+    options =>
+        options.UseSqlite(
+            builder.Configuration.GetConnectionString("ApiContext")
+                ?? throw new InvalidOperationException("Connection string 'ApiContext' not found.")
+        )
+);
 
 builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen( options => 
+builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Version = "v1",
-        Title = "Api Gestion De Alquileres",
-        Description = "An ASP.NET Core Web API to carry out the management of branches, cars, clients and reservations in a car rental company",
-        Contact = new OpenApiContact
+    options.SwaggerDoc(
+        "v1",
+        new Microsoft.OpenApi.Models.OpenApiInfo
         {
-          Name = "Muhammad Hicho Haidor",
-          Email = "mh.haidor@gmail.com",
-          Url = new Uri("https://github.com/Mohasb")
+            Version = "v1",
+            Title = "Api Gestion De Alquileres",
+            Description =
+                "An ASP.NET Core Web API to carry out the management of branches, cars, clients and reservations in a car rental company",
+            Contact = new OpenApiContact
+            {
+                Name = "Muhammad Hicho Haidor",
+                Email = "mh.haidor@gmail.com",
+                Url = new Uri("https://github.com/Mohasb")
+            }
         }
-    });  
+    );
     // Set the comments path for the Swagger JSON and UI.
-         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-         options.IncludeXmlComments(xmlPath);
-
-
-
-
-
-
-
-
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
 
     //Add Security JWT to swagger
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-    In = ParameterLocation.Header, 
-    Description = "Please insert JWT with Bearer into field",
-    Name = "Authorization",
-    Type = SecuritySchemeType.ApiKey 
-  });
-  options.AddSecurityRequirement(new OpenApiSecurityRequirement {
-   { 
-     new OpenApiSecurityScheme 
-     { 
-       Reference = new OpenApiReference 
-       { 
-         Type = ReferenceType.SecurityScheme,
-         Id = "Bearer" 
-       } 
-      },
-      new string[] { } 
-    } 
-  }); 
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please insert JWT with Bearer into field",
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        }
+    );
+    options.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] { }
+            }
+        }
+    );
 });
 
 //JWT Especifications
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options => 
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? ""))
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "")
+            )
+        };
+    });
 
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
