@@ -67,7 +67,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         /// </summary>
         /// <param name="id">id of the Reservation to delete</param>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReservation(int id) =>
             await _repository.RemoveElement(id);
     }

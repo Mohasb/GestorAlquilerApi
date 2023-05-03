@@ -35,13 +35,10 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             int age
         )
         {
-
-
-            var data = from p in _context.Planning
-                       where p.Day >= startDate
-                       && p.Day <= endDate
-                       && p.BranchId == branchId
-                       group p by p.CarCategory;
+            var data =
+                from p in _context.Planning
+                where p.Day >= startDate && p.Day <= endDate && p.BranchId == branchId
+                group p by p.CarCategory;
 
             List<Car> cars = new();
 
@@ -56,10 +53,9 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                     var filteredCars = branchCars.Where(c => c.Category == group.Key);
 
                     // Agrega los coches filtrados a la lista de coches
-                    cars.AddRange(filteredCars);
+                    cars.Add(filteredCars.First());
                 }
             }
-
 
             return cars;
 

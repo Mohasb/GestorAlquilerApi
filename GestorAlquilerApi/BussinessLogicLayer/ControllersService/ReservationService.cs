@@ -7,21 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class ReservationService<ReservationDTO> : ControllerBase, IGenericService<ReservationDTO>
+    public class ReservationService<ReservationDTO>
+        : ControllerBase,
+            IGenericService<ReservationDTO>
     {
         private readonly IQueryReservation _repository;
         private readonly IMapper _mapper;
         private readonly ISaveData<Reservation> _saveData;
         private readonly DbSet<Reservation> _reservations;
+
         //
         private readonly IQueryBranch _brachesRepo;
         private readonly DbSet<Branch> _branches;
+
         //
         private readonly IQueryClient _clientRepo;
         private readonly DbSet<Client> _clients;
 
-
-        public ReservationService(IQueryReservation repository, IMapper mapper, ISaveData<Reservation> saveData, IQueryBranch brachesRepo, IQueryClient clientRepo)
+        public ReservationService(
+            IQueryReservation repository,
+            IMapper mapper,
+            ISaveData<Reservation> saveData,
+            IQueryBranch brachesRepo,
+            IQueryClient clientRepo
+        )
         {
             _repository = repository;
             _mapper = mapper;
@@ -144,7 +153,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 {
                     try
                     {
-                        RemoveCarFromAvailable(reservation);
+                        RemoveCarFromAvailable(reservation, "remove");
                         _repository.AddReservation(reservation);
                         await _saveData.SaveChangesAsync();
                         return reservationDTO;
@@ -172,7 +181,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return NotFound();
             }
-
+            RemoveCarFromAvailable(reservation, "add");
             _reservations.Remove(reservation);
             await _saveData.SaveChangesAsync();
 
@@ -184,16 +193,23 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return (_reservations?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private async void RemoveCarFromAvailable(Reservation reservation)
+        private async void RemoveCarFromAvailable(Reservation reservation, string operation)
         {
             var planning = _repository.GetReservationData(reservation);
 
             foreach (var day in planning)
             {
-                day.CarsAvailables--;
+                if (operation == "remove")
+                {
+                    day.CarsAvailables--;
+                }
+                else
+                {
+                    day.CarsAvailables++;
+                }
             }
             await _saveData.SaveChangesAsync();
-        } 
+        }
 
         private bool AreCarsAvailables(Reservation reservation)
         {
