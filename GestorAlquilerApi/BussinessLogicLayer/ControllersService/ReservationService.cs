@@ -144,7 +144,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 {
                     try
                     {
-                        RemoveCarFromAvailable(reservation);
+                        //RemoveCarFromAvailable(reservation);
                         _repository.AddReservation(reservation);
                         await _saveData.SaveChangesAsync();
                         return reservationDTO;
@@ -184,7 +184,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return (_reservations?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private async void RemoveCarFromAvailable(Reservation reservation)
+        /* private async void RemoveCarFromAvailable(Reservation reservation)
         {
             var planning = _repository.GetReservationData(reservation);
 
@@ -193,7 +193,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 day.CarsAvailables--;
             }
             await _saveData.SaveChangesAsync();
-        } 
+        }  */
 
         private bool AreCarsAvailables(Reservation reservation)
         {

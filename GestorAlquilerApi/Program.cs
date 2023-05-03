@@ -41,8 +41,12 @@ builder.Services.AddScoped<IQueryCar, CarQueries>();
 builder.Services.AddScoped(typeof(IGenericService<ClientDTO>), typeof(ClientService<ClientDTO>));
 builder.Services.AddScoped<IQueryClient, ClientQueries>();
 
-builder.Services.AddScoped(
+/* builder.Services.AddScoped(
     typeof(IGenericService<PlanningDTO>),
+    typeof(PlanningService<PlanningDTO>)
+); */
+builder.Services.AddScoped(
+    typeof(PlanningService<PlanningDTO>),
     typeof(PlanningService<PlanningDTO>)
 );
 builder.Services.AddScoped<IQueryPlanning, PlanningQueries>();

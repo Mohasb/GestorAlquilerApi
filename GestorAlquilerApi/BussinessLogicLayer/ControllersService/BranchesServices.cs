@@ -117,7 +117,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             //Here is added all the planning from this branch(365 days for categories(Car))
-            AddPlanningBranch(branch);
+            //AddPlanningBranch(branch);
 
             return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
         }
@@ -146,7 +146,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return (_branches?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private async void AddPlanningBranch(Branch branch)
+        /* private async void AddPlanningBranch(Branch branch)
         {
             var categories = Enum.GetValues(typeof(Car.Categories));
 
@@ -168,6 +168,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     await _saveData.SaveChangesAsync();
                 }
             }
-        }
+        } */
     }
 }

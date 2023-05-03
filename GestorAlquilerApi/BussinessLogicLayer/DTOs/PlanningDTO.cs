@@ -12,5 +12,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         public int CarsAvailables { get; set; }
         public string? CarCategory { get; set; }
         public int BranchId { get; set; }
+        public int CarId { get; set; }
     }
 }

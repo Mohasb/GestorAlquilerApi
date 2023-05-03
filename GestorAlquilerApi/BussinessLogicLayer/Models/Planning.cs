@@ -8,5 +8,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Models
         public string? CarCategory { get; set; }
         public int BranchId { get; set; }
         public Branch? Branch { get; set; }
+        public Car? Car {get; set;}
+        public int CarId { get; set; }
     }
 }

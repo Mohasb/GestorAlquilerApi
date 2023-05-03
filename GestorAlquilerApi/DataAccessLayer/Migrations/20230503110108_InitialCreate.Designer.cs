@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestorAlquilerApi.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230425060559_InitialCreate")]
+    [Migration("20230503110108_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -145,6 +145,9 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.Property<string>("CarCategory")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CarId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CarsAvailables")
                         .HasColumnType("INTEGER");
 
@@ -154,6 +157,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("CarId");
 
                     b.ToTable("Planning");
                 });
@@ -170,6 +175,9 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.Property<string>("CarCategory")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CarId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
@@ -182,6 +190,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("ClientId");
 
@@ -207,7 +217,15 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GestorAlquilerApi.BussinessLogicLayer.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Branch");
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("GestorAlquilerApi.BussinessLogicLayer.Models.Reservation", b =>
@@ -218,6 +236,12 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GestorAlquilerApi.BussinessLogicLayer.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GestorAlquilerApi.BussinessLogicLayer.Models.Client", "Client")
                         .WithMany("Reservations")
                         .HasForeignKey("ClientId")
@@ -225,6 +249,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
+
+                    b.Navigation("Car");
 
                     b.Navigation("Client");
                 });

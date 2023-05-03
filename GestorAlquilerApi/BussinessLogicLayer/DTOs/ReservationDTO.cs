@@ -22,5 +22,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 
         [Required(ErrorMessage = "The field 'CarId' is required")]
         public string? CarCategory { get; set; }
+        public int CarId { get; set; }
     }
 }

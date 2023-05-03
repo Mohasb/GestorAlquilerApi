@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class PlanningService<PlanningDTO> : ControllerBase, IGenericService<PlanningDTO>
+    public class PlanningService<PlanningDTO> : ControllerBase/* , IGenericService<PlanningDTO> */
     {
         private readonly IQueryPlanning _repository;
         private readonly IMapper _mapper;
@@ -32,7 +32,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             return await planning.ToListAsync();
         }
 
-        public async Task<ActionResult<PlanningDTO>> GetElementById(int id)
+        /* public async Task<ActionResult<PlanningDTO>> GetElementById(int id)
         {
             if (_planning == null)
             {
@@ -114,6 +114,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private bool PlanningExists(int id)
         {
             return (_planning?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        } */
     }
 }

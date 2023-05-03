@@ -134,7 +134,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
 
             //Here is addedd a this car to availables in planning
-            AvailibilityCar(carDTO, "add");
+            //AvailibilityCar(carDTO, "add");
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
@@ -153,7 +153,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             _repository.Remove(car);
             //Delete car from availables planning
-            AvailibilityCar(_mapper.Map<CarDTO>(car), "remove");
+            //AvailibilityCar(_mapper.Map<CarDTO>(car), "remove");
             await _saveData.SaveChangesAsync();
 
             return NoContent();
@@ -164,7 +164,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
         }        
-        private async void AvailibilityCar(CarDTO carDTO, string operation)
+        /* private async void AvailibilityCar(CarDTO carDTO, string operation)
         {
             var car = _mapper.Map<Car>(carDTO);
             var planning = _planning.PlanningCarCategory(car);
@@ -183,6 +183,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
             await _saveData.SaveChangesAsync();
-        }
+        } */
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
+using GestorAlquilerApi.BussinessLogicLayer.ControllersService;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
 {
@@ -8,9 +9,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
     [ApiController]
     public class PlanningController
     {
-        private readonly IGenericService<PlanningDTO> _planningService;
+        private readonly PlanningService<PlanningDTO> _planningService;
 
-        public PlanningController(IGenericService<PlanningDTO> planningService)
+        public PlanningController(PlanningService<PlanningDTO> planningService)
         {
             _planningService = planningService;
         }
@@ -36,7 +37,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         /// </remarks>
         /// <response code="200">Returns the Planning</response>
         /// <response code="400">If there are no Planning with that id</response>
-        [HttpGet("{id}")]
+        /* [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<PlanningDTO>> GetPlanning(int id) =>
             await _planningService.GetElementById(id);
@@ -67,6 +68,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlanning(int id) =>
-            await _planningService.RemoveElement(id);
+            await _planningService.RemoveElement(id);*/
     }
 }
