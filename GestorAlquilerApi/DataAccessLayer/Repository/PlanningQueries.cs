@@ -2,9 +2,7 @@
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace GestorAlquilerApi.DataAccessLayer.Repository
 {
@@ -40,7 +38,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                 where p.Day >= startDate && p.Day <= endDate && p.BranchId == branchId
                 group p by p.CarCategory;
 
-            List<Car> cars = new();
+            List<Car> cars = new List<Car>();
 
             foreach (var group in data)
             {
@@ -53,7 +51,29 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                     var filteredCars = branchCars.Where(c => c.Category == group.Key);
 
                     // Agrega los coches filtrados a la lista de coches
-                    cars.Add(filteredCars.First());
+                    cars.AddRange(filteredCars);
+                }
+            }
+
+            //si hay una reserva con el carid(reservas)==carid(aqui) entre las fechas indicadas no lo incluyas
+            var reservas = (from r in _context.Reservation select r).ToList();
+
+            foreach (Reservation reserva in reservas)
+            {
+                foreach (Car car in cars.ToList())
+                {
+                    if (
+                        reserva.CarId == car.Id
+                            && DateTime.Compare(reserva.StartDate, endDate) <= 0
+                            && DateTime.Compare(reserva.EndDate, startDate) >= 0
+                        /* && reserva.StartDate == startDate
+                    || reserva.StartDate == endDate */
+                        /* && reserva.EndDate <= endDate  */
+                        /* || endDate == reserva.StartDate && startDate == reserva.EndDate */
+                    )
+                    {
+                        cars.Remove(car);
+                    }
                 }
             }
 

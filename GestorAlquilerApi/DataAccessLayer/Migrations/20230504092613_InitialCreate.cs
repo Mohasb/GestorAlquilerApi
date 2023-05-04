@@ -107,7 +107,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CarCategory = table.Column<string>(type: "TEXT", nullable: true),
                     BranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ClientId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CarId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,6 +117,12 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         name: "FK_Reservation_Branch_BranchId",
                         column: x => x.BranchId,
                         principalTable: "Branch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservation_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -166,6 +173,11 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                 column: "BranchId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservation_CarId",
+                table: "Reservation",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservation_ClientId",
                 table: "Reservation",
                 column: "ClientId");
@@ -175,19 +187,19 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Car");
-
-            migrationBuilder.DropTable(
                 name: "Planning");
 
             migrationBuilder.DropTable(
                 name: "Reservation");
 
             migrationBuilder.DropTable(
-                name: "Branch");
+                name: "Car");
 
             migrationBuilder.DropTable(
                 name: "Client");
+
+            migrationBuilder.DropTable(
+                name: "Branch");
         }
     }
 }
