@@ -4,6 +4,14 @@ dotnet watch
 
 
 Reservation in diferent branch
+cambio action result por: al cargar combobox y no hay branches retorn el ok() da error y no muesta el mensaje en consola ni se puede darer el error en el front
+
+Uncaught (in promise) SyntaxError: Unexpected token 'T', "There are "... is not valid JSON
+await (async)
+(anonymous) @ ComboBox.jsx:54
+
+
+
 
 
 
