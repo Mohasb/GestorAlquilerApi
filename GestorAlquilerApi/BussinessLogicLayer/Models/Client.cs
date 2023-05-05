@@ -8,7 +8,6 @@
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public string? ConfirmationPassword { get; set; }
         public int PhoneNumber { get; set; }
         public string? BankAccount { get; set; }
         public string? Rol { get; set; } = "User";

@@ -14,7 +14,13 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly DbSet<Car> _cars;
         private readonly ISaveData<Car> _saveData;
         private readonly IQueryPlanning _planning;
-        public CarService(IQueryCar repository, IMapper mapper, ISaveData<Car> saveData, IQueryPlanning planning)
+
+        public CarService(
+            IQueryCar repository,
+            IMapper mapper,
+            ISaveData<Car> saveData,
+            IQueryPlanning planning
+        )
         {
             _repository = repository;
             _mapper = mapper;
@@ -96,7 +102,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return Problem("Entity set 'ApiContext.Car'  is null.");
             }
 
-
             try
             {
                 var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
@@ -106,15 +111,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                         $"Category '{car.Category}' is invalid. It has to be in: {string.Join(", ", valuesAsArray.SkipLast(1))} or {valuesAsArray[^1]}"
                     );
                 }
+
+                Car.Prices price = (Car.Prices)Enum.Parse(typeof(Car.Prices), car.Category);
+                car.Price = (decimal?)price;
+
                 _repository.AddCar(car);
 
                 await _saveData.SaveChangesAsync();
-
-
             }
             catch (DbUpdateException ex)
             {
-
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("UNIQUE"))
                 {
                     return BadRequest(
@@ -163,13 +169,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private bool CarExists(int id)
         {
             return (_cars?.Any(e => e.Id == id)).GetValueOrDefault();
-        }        
+        }
+
         private async void AvailibilityCar(CarDTO carDTO, string operation)
         {
             var car = _mapper.Map<Car>(carDTO);
             var planning = _planning.PlanningCarCategory(car);
-
-
 
             foreach (var day in planning)
             {

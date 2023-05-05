@@ -3,14 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
-    public enum Categoria
-    {
-        A,
-        B,
-        C,
-        D
-    }
-
     public class CarDTO
     {
         //[JsonIgnore]
@@ -47,5 +39,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 
         [Required(ErrorMessage = "The field 'BranchId' is required")]
         public int BranchId { get; set; }
+
     }
 }

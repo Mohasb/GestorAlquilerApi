@@ -64,12 +64,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                 {
                     if (
                         reserva.CarId == car.Id
-                            && DateTime.Compare(reserva.StartDate, endDate) <= 0
-                            && DateTime.Compare(reserva.EndDate, startDate) >= 0
-                        /* && reserva.StartDate == startDate
-                    || reserva.StartDate == endDate */
-                        /* && reserva.EndDate <= endDate  */
-                        /* || endDate == reserva.StartDate && startDate == reserva.EndDate */
+                        && DateTime.Compare(reserva.StartDate, endDate) <= 0
+                        && DateTime.Compare(reserva.EndDate, startDate) >= 0
                     )
                     {
                         cars.Remove(car);
@@ -78,22 +74,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             }
 
             return cars;
-
-            //var cars = (
-            //    from p in _context.Planning
-            //    from b in _context.Branch
-            //    from c in _context.Car
-            //    where
-            //        p.BranchId == b.Id
-            //        && p.BranchId == branchId
-            //        && p.Day >= startDate
-            //        && p.Day <= endDate
-            //        && c.BranchId == branchId
-            //    select c
-            //).GroupBy(c => c.Category).Select(c => c.First());
-
-
-            //return cars;
         }
     }
 }

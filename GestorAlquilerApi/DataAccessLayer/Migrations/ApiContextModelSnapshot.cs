@@ -73,6 +73,9 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Registration")
                         .HasColumnType("TEXT");
 
@@ -93,9 +96,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("BankAccount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConfirmationPassword")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")

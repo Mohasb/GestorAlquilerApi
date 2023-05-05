@@ -39,7 +39,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     Email = table.Column<string>(type: "TEXT", nullable: true),
                     Password = table.Column<string>(type: "TEXT", nullable: true),
-                    ConfirmationPassword = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     BankAccount = table.Column<string>(type: "TEXT", nullable: true),
                     Rol = table.Column<string>(type: "TEXT", nullable: true)
@@ -62,6 +61,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     GearShiftType = table.Column<string>(type: "TEXT", nullable: true),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
                     Category = table.Column<string>(type: "TEXT", nullable: true),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: true),
                     BranchId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

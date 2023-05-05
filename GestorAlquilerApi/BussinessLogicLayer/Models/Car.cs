@@ -10,6 +10,14 @@
             D
         }
 
+        public enum Prices
+        {
+            A = 262,
+            B = 170,
+            C = 265,
+            D = 280,
+        }
+
         public int Id { get; set; }
         public string? Registration { get; set; }
         public string? Brand { get; set; }
@@ -18,6 +26,7 @@
         public string? GearShiftType { get; set; }
         public string? Image { get; set; }
         public string? Category { get; set; }
+        public decimal? Price { get; set; }
 
         public int BranchId { get; set; }
         public Branch? Branch { get; set; }

@@ -29,10 +29,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? Password { get; set; }
 
-        [Required(ErrorMessage = "The field 'Confirmation Password' is required")]
-        [MaxLength(100)]
-        public string? ConfirmationPassword { get; set; }
-
         [Required(ErrorMessage = "The field 'Phone number' is required")]
         public int PhoneNumber { get; set; }
 
