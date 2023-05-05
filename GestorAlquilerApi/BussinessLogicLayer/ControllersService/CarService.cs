@@ -112,8 +112,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     );
                 }
 
-                Car.Prices price = (Car.Prices)Enum.Parse(typeof(Car.Prices), car.Category);
-                car.Price = (decimal?)price;
+                if (car.Category != null)
+                {
+                    Car.Prices price = (Car.Prices)Enum.Parse(typeof(Car.Prices), car.Category);
+                    car.Price = (decimal?)price;
+                }
 
                 _repository.AddCar(car);
 
