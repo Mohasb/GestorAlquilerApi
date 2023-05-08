@@ -90,6 +90,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         public async Task<ActionResult<ClientDTO>> AddElement(ClientDTO clientDTO)
         {
             var client = _mapper.Map<Client>(clientDTO);
+            client.Password = BCrypt.Net.BCrypt.HashPassword(client.Password);
 
             if (_clients == null)
             {

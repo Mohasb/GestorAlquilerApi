@@ -23,6 +23,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             _repository = repository;
             _mapper = mapper;
         }
+
         public ClientDTO? AuthenticateUser(UserDTO user)
         {
             var usuario = _repository.GetClientByEmail(user);
@@ -33,6 +34,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             }
             return null;
         }
+
         public IActionResult Login(UserDTO user)
         {
             IActionResult response;
@@ -41,11 +43,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (_user != null)
             {
                 var token = GenerateToken(_user);
-                response = Ok(new { token });
+                response = Ok(new { token, _user.Rol });
                 return response;
             }
             return NotFound("Usuario NO encontrado");
         }
+
         public ClientDTO? CheckUserEmailPassword(UserDTO user) => AuthenticateUser(user);
 
         public string GenerateToken(ClientDTO user)
