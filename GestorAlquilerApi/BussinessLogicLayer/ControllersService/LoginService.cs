@@ -38,30 +38,41 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public IActionResult Login(UserDTO user)
         {
-            //IActionResult response;
             var _user = CheckUserEmailPassword(user);
 
             if (_user != null)
             {
                 var token = GenerateToken(_user);
-
-                //Response.StatusCode = (int)HttpStatusCode.OK;
+                var userWithToken = new
+                {
+                    id = _user.Id,
+                    registration = _user.Registration,
+                    email = _user.Email,
+                    name = _user.Name,
+                    lastName = _user.LastName,
+                    pwd = _user.Password,
+                    phone = _user.PhoneNumber,
+                    bankAccount = _user.BankAccount,
+                    token = token
+                };
                 return new JsonResult(
                     new
                     {
                         statusCode = (int)HttpStatusCode.OK,
                         isOk = true,
-                        token,
-                        _user.Rol
+                        userWithToken
                     }
                 );
             }
+
+
+            
             return new JsonResult(
                 new
                 {
                     statusCode = (int)HttpStatusCode.NotFound,
                     isOk = false,
-                    responseText = "NOT OK"
+                    responseText = "Usuario no encontrado"
                 }
             );
         }
