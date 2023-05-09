@@ -46,9 +46,24 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 var token = GenerateToken(_user);
 
                 //Response.StatusCode = (int)HttpStatusCode.OK;
-                return new JsonResult(new { token, _user.Rol });
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.OK,
+                        isOk = true,
+                        token,
+                        _user.Rol
+                    }
+                );
             }
-            return new JsonResult(new { responseText = "NOT OK" });
+            return new JsonResult(
+                new
+                {
+                    statusCode = (int)HttpStatusCode.NotFound,
+                    isOk = false,
+                    responseText = "NOT OK"
+                }
+            );
         }
 
         public ClientDTO? CheckUserEmailPassword(UserDTO user) => AuthenticateUser(user);
