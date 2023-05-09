@@ -47,10 +47,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 {
                     id = _user.Id,
                     registration = _user.Registration,
+                    rol = _user.Rol,
                     email = _user.Email,
                     name = _user.Name,
                     lastName = _user.LastName,
-                    pwd = _user.Password,
                     phone = _user.PhoneNumber,
                     bankAccount = _user.BankAccount,
                     token = token
@@ -65,16 +65,40 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 );
             }
 
-
-            
-            return new JsonResult(
-                new
-                {
-                    statusCode = (int)HttpStatusCode.NotFound,
-                    isOk = false,
-                    responseText = "Usuario no encontrado"
-                }
-            );
+            var usuario = _repository.GetClientByEmail(user);
+            if (usuario == null)
+            {
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.NotFound,
+                        isOk = false,
+                        responseText = "Usuario no encontrado"
+                    }
+                );
+            }
+            else if (!BCrypt.Net.BCrypt.Verify(user.Password, usuario.Password))
+            {
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.NotFound,
+                        isOk = false,
+                        responseText = "El password no es correcto"
+                    }
+                );
+            }
+            else
+            {
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.NotFound,
+                        isOk = false,
+                        responseText = "Error Login"
+                    }
+                );
+            }
         }
 
         public ClientDTO? CheckUserEmailPassword(UserDTO user) => AuthenticateUser(user);
