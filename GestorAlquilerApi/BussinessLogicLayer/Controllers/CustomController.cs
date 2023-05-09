@@ -66,6 +66,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         {
             return _customService.GetCarsByBranch(branchId);
         }
+
         /// <summary>
         /// Returns a list of car availables in the dates and branch id given
         /// </summary>

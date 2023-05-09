@@ -1,4 +1,5 @@
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces

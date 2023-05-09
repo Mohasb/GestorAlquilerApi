@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -11,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
-    public class LoginService : ControllerBase, ILoginService
+    public class LoginService : ILoginService
     {
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
@@ -37,16 +38,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public IActionResult Login(UserDTO user)
         {
-            IActionResult response;
+            //IActionResult response;
             var _user = CheckUserEmailPassword(user);
 
             if (_user != null)
             {
                 var token = GenerateToken(_user);
-                response = Ok(new { token, _user.Rol });
-                return response;
+
+                //Response.StatusCode = (int)HttpStatusCode.OK;
+                return new JsonResult(new { token, _user.Rol });
             }
-            return NotFound("Usuario NO encontrado");
+            return new JsonResult(new { responseText = "NOT OK" });
         }
 
         public ClientDTO? CheckUserEmailPassword(UserDTO user) => AuthenticateUser(user);
