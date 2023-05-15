@@ -48,7 +48,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                     var branchCars = _context.Car.Where(c => c.BranchId == branchId);
 
                     // Filtra los coches por categoría
-                    var filteredCars = branchCars.Where(c => c.Category == group.Key);
+                    var filteredCars = branchCars
+                        .Where(c => c.Category == group.Key);
 
                     // Agrega los coches filtrados a la lista de coches
                     cars.AddRange(filteredCars);
