@@ -107,6 +107,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CarCategory = table.Column<string>(type: "TEXT", nullable: true),
                     BranchId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReturnBranchId = table.Column<int>(type: "INTEGER", nullable: false),
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false),
                     CarId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

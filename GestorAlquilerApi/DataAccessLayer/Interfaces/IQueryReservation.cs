@@ -11,5 +11,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Interfaces
 
         public bool CheckAvailabilityCars(Reservation reservation);
         public IQueryable<Planning> GetReservationData(Reservation reservation);
+        public IQueryable<Planning> GetReservationDataReturn(Reservation reservation);
+        public IQueryable<Planning> GetReservationDataBranch(Reservation reservation);
     }
 }

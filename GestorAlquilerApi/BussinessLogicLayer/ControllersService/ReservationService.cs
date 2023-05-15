@@ -24,12 +24,17 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IQueryClient _clientRepo;
         private readonly DbSet<Client> _clients;
 
+        //
+        private readonly IQueryCar _carsRepo;
+        private readonly DbSet<Car> _cars;
+
         public ReservationService(
             IQueryReservation repository,
             IMapper mapper,
             ISaveData<Reservation> saveData,
             IQueryBranch brachesRepo,
-            IQueryClient clientRepo
+            IQueryClient clientRepo,
+            IQueryCar carsRepo
         )
         {
             _repository = repository;
@@ -43,6 +48,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //
             _clientRepo = clientRepo;
             _clients = _clientRepo.GetDataClients();
+            //
+            _carsRepo = carsRepo;
+            _cars = _carsRepo.GetDataCars();
         }
 
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllElements()
@@ -195,17 +203,60 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         private async void RemoveCarFromAvailable(Reservation reservation, string operation)
         {
-            var planning = _repository.GetReservationData(reservation);
-
-            foreach (var day in planning)
+            if (reservation.BranchId == reservation.ReturnBranchId)
             {
-                if (operation == "remove")
+                var planning = _repository.GetReservationData(reservation);
+
+                foreach (var day in planning)
                 {
-                    day.CarsAvailables--;
+                    if (operation == "remove")
+                    {
+                        day.CarsAvailables--;
+                    }
+                    else
+                    {
+                        day.CarsAvailables++;
+                    }
                 }
-                else
+            }
+            else
+            {
+                //Aqui establece el id del coche con la sucursal nueva y añade disponiblidad
+                //Obtener el coche
+                var car = await _cars.FindAsync(reservation.CarId);
+                //cambio de la branchId del coche
+                if (car != null)
                 {
-                    day.CarsAvailables++;
+                    car.BranchId = reservation.ReturnBranchId;
+                }
+                //quitar de la antigua desde el dia de reserva hasta el final
+                var planningBranch = _repository.GetReservationDataBranch(reservation);
+
+                foreach (var day in planningBranch)
+                {
+                    if (operation == "remove")
+                    {
+                        day.CarsAvailables--;
+                    }
+                    else
+                    {
+                        day.CarsAvailables++;
+                    }
+                }
+
+                //añadir al planning de la nueva +1 de disponibilidad has ta el final
+                var planningReturnBranch = _repository.GetReservationDataReturn(reservation);
+
+                foreach (var day in planningReturnBranch)
+                {
+                    if (operation == "remove")
+                    {
+                        day.CarsAvailables++;
+                    }
+                    else
+                    {
+                        day.CarsAvailables--;
+                    }
                 }
             }
             await _saveData.SaveChangesAsync();

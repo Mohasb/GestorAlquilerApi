@@ -17,6 +17,9 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [Required(ErrorMessage = "The field 'BranchId' is required")]
         public int BranchId { get; set; }
 
+        [Required(ErrorMessage = "The field 'ReturnBranchId' is required")]
+        public int ReturnBranchId { get; set; }
+
         [Required(ErrorMessage = "The field 'ClientId' is required")]
         public int ClientId { get; set; }
 
