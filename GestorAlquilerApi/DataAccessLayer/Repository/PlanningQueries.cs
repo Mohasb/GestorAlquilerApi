@@ -47,29 +47,32 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                     // Obtiene los coches del branch correspondiente
                     var branchCars = _context.Car.Where(c => c.BranchId == branchId);
 
+                    //si hay una reserva con el carid(reservas)==carid(aqui) entre las fechas indicadas no lo incluyas
+                    var reservas = (from r in _context.Reservation select r).ToList();
+
+                    foreach (Reservation reserva in reservas)
+                    {
+                        foreach (Car car in branchCars)
+                        {
+                            if (
+                                reserva.CarId == car.Id
+                                && DateTime.Compare(reserva.StartDate, endDate) <= 0
+                                && DateTime.Compare(reserva.EndDate, startDate) >= 0
+                            )
+                            {
+                                branchCars.ToList().Remove(car);
+                            }
+                        }
+                    }
+
                     // Filtra los coches por categoría
-                    var filteredCars = branchCars.Where(c => c.Category == group.Key);
+                    var filteredCars = branchCars
+                        .Where(c => c.Category == group.Key)
+                        .GroupBy(car => car.Model)
+                        .Select(c => c.First());
 
                     // Agrega los coches filtrados a la lista de coches
                     cars.AddRange(filteredCars);
-                }
-            }
-
-            //si hay una reserva con el carid(reservas)==carid(aqui) entre las fechas indicadas no lo incluyas
-            var reservas = (from r in _context.Reservation select r).ToList();
-
-            foreach (Reservation reserva in reservas)
-            {
-                foreach (Car car in cars.ToList())
-                {
-                    if (
-                        reserva.CarId == car.Id
-                        && DateTime.Compare(reserva.StartDate, endDate) <= 0
-                        && DateTime.Compare(reserva.EndDate, startDate) >= 0
-                    )
-                    {
-                        cars.Remove(car);
-                    }
                 }
             }
 
