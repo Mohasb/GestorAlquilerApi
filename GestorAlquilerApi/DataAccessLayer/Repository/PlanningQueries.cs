@@ -45,14 +45,14 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                 if (group.All(d => d.CarsAvailables > 0))
                 {
                     // Obtiene los coches del branch correspondiente
-                    var branchCars = _context.Car.Where(c => c.BranchId == branchId);
+                    var branchCars = _context.Car.Where(c => c.BranchId == branchId).ToList();
 
                     //si hay una reserva con el carid(reservas)==carid(aqui) entre las fechas indicadas no lo incluyas
                     var reservas = (from r in _context.Reservation select r).ToList();
 
                     foreach (Reservation reserva in reservas)
                     {
-                        foreach (Car car in branchCars)
+                        foreach (Car car in branchCars.ToList())
                         {
                             if (
                                 reserva.CarId == car.Id
@@ -60,7 +60,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                                 && DateTime.Compare(reserva.EndDate, startDate) >= 0
                             )
                             {
-                                branchCars.ToList().Remove(car);
+                                branchCars.Remove(car);
                             }
                         }
                     }
