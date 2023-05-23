@@ -143,7 +143,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return BadRequest($"there is no customer with id = {reservation.ClientId}");
             }
             //Validate Dates
-            else if (reservation.StartDate < DateTime.Now)
+            else if (reservation.StartDate <= DateTime.Now)
             {
                 return BadRequest($"The StartDate must be greater than {DateTime.Now}.");
             }

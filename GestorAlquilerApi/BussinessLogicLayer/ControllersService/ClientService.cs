@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -97,11 +98,58 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return Problem("Entity set 'ApiContext.Client'  is null.");
             }
 
-            _repository.AddClient(client);
+            try
+            {
+                _repository.AddClient(client);
+                await _saveData.SaveChangesAsync();
 
-            await _saveData.SaveChangesAsync();
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.BadRequest,
+                        isOk = true,
+                        client = client
+                    }
+                );
+            }
+            catch (Exception err)
+            {
+                var errorMessage = err.InnerException!.Message;
 
-            return CreatedAtAction("GetClient", new { id = client.Id }, client);
+                if (errorMessage.Contains("UNIQUE") && errorMessage.Contains("Registration"))
+                {
+                    return new JsonResult(
+                        new
+                        {
+                            statusCode = (int)HttpStatusCode.BadRequest,
+                            isOk = false,
+                            responseText = "Registration not unique"
+                        }
+                    );
+                }
+                else if (errorMessage.Contains("UNIQUE") && errorMessage.Contains("Email"))
+                {
+                    return new JsonResult(
+                        new
+                        {
+                            statusCode = (int)HttpStatusCode.OK,
+                            isOk = false,
+                            responseText = "Email not unique"
+                        }
+                    );
+                }
+                else
+                {
+                    return new JsonResult(
+                        new
+                        {
+                            statusCode = (int)HttpStatusCode.OK,
+                            isOk = false,
+                            responseText = errorMessage
+                        }
+                    );
+                }
+            }
         }
 
         public async Task<IActionResult> RemoveElement(int id)

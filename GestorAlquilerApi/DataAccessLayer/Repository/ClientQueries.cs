@@ -16,9 +16,16 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
         }
 
         public DbSet<Client> GetDataClients() => _context.Client;
+
         public void AddClient(Client client) => _context.Add(client);
+
         public void Remove(Client client) => _context.Remove(client);
+
         public Client? GetClientByEmail(UserDTO user) =>
-            (from c in _context.Client where c.Email == user.Email select c).FirstOrDefault();
+            (
+                from c in _context.Client
+                where c.Email!.ToLower() == user.Email!.ToLower()
+                select c
+            ).FirstOrDefault();
     }
 }
