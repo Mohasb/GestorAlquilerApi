@@ -5,6 +5,10 @@ using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 {
@@ -14,6 +18,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IMapper _mapper;
         private readonly DbSet<Client> _clients;
         private readonly ISaveData<Client> _saveData;
+        private readonly IConfiguration _config;
 
         public ClientService(IQueryClient repository, IMapper mapper, ISaveData<Client> saveData)
         {
@@ -60,8 +65,18 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public async Task<IActionResult> EditElement(int id, ClientDTO clientDTO)
         {
+
+
+
+
+
             var client = _mapper.Map<Client>(clientDTO);
             client.Id = id;
+
+            string firstDigits = client.BankAccount!.Substring(0, client.BankAccount.Length - 4);
+            string asteriscos = new String('*', firstDigits.Length);
+            string lastFourDigits = client.BankAccount!.Substring(client.BankAccount.Length - 4);
+            client.BankAccount = asteriscos + lastFourDigits;
 
             if (id != client.Id)
             {
@@ -85,7 +100,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 }
             }
 
-            return NoContent();
+            return new JsonResult(
+                new
+                {
+                    statusCode = (int)HttpStatusCode.OK,
+                    isOk = true,
+                    client = client,
+                }
+            );
         }
 
         public async Task<ActionResult<ClientDTO>> AddElement(ClientDTO clientDTO)
@@ -106,7 +128,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 return new JsonResult(
                     new
                     {
-                        statusCode = (int)HttpStatusCode.BadRequest,
+                        statusCode = (int)HttpStatusCode.OK,
                         isOk = true,
                         client = client
                     }

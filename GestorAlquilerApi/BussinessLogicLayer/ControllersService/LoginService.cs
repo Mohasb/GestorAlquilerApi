@@ -43,6 +43,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             if (_user != null)
             {
                 var token = GenerateToken(_user);
+
+                string firstDigits = _user.BankAccount!.Substring(0, _user.BankAccount.Length - 4);
+                string asteriscos = new String('*', firstDigits.Length);
+
+                string lastFourDigits = _user.BankAccount!.Substring(_user.BankAccount.Length - 4);
+
                 var userWithToken = new
                 {
                     id = _user.Id,
@@ -51,8 +57,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     email = _user.Email,
                     name = _user.Name,
                     lastName = _user.LastName,
-                    phone = _user.PhoneNumber,
-                    bankAccount = _user.BankAccount,
+                    phoneNumber = _user.PhoneNumber,
+                    bankAccount = asteriscos + lastFourDigits,
                     token = token
                 };
                 return new JsonResult(

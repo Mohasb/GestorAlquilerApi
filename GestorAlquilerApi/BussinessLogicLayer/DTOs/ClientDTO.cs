@@ -25,7 +25,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "The field 'password' is required")]
+        /* [Required(ErrorMessage = "The field 'password' is required")] */
         [MaxLength(100)]
         public string? Password { get; set; }
 
@@ -36,7 +36,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? BankAccount { get; set; }
 
-        [JsonIgnore]
         public string? Rol { get; set; } = "User";
+        public string? Token { get; set; }
     }
 }
