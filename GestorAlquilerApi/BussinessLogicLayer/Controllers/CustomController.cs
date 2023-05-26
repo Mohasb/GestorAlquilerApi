@@ -81,5 +81,12 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
             var cars = _customService.GetAvailablesCars(branchId, startDate, endDate, ageUser);
             return cars;
         }
+
+        [HttpGet("GetReservationByClient/{id}")]
+        public IActionResult GetReservationByClient(int id)
+        {
+            var reservation = _customService.GetReservationByClient(id);
+            return reservation;
+        }
     }
 }

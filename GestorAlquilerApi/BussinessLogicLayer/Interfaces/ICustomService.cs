@@ -10,5 +10,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Interfaces
     {
         List<Car> GetAvailablesCars(int branchId, DateTime startDate, DateTime endDate, int age);
         public List<CarDTO> GetCarsByBranch(int branchId);
+        IActionResult GetReservationByClient(int id);
     }
 }

@@ -71,5 +71,25 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                 select p;
             return data;
         }
+
+        public IQueryable<Reservation> GetDataReservationByClient(int id)
+        {
+            var data =
+                from r in _context.Reservation
+                where r.ClientId == id
+                from b in _context.Branch
+                where r.BranchId == b.Id
+                from rb in _context.Branch
+                where r.ReturnBranchId == b.Id
+
+                select new
+                {
+                    r,
+                    b.Name,
+                    returnBranch = rb.Name
+                };
+            //Aqui obtener los nombre sde las sucursales tambien y solo mostrar las reservas del dia date now para adelante
+            return data;
+        }
     }
 }
