@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Reflection.Metadata;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
@@ -17,7 +18,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? Name { get; set; }
 
-        [Required(ErrorMessage = "The field 'LastName' is required")]
         [MaxLength(100)]
         public string? LastName { get; set; }
 
@@ -25,11 +25,10 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? Email { get; set; }
 
-        /* [Required(ErrorMessage = "The field 'password' is required")] */
+        [Required(ErrorMessage = "The field 'Password' is required")]
         [MaxLength(100)]
         public string? Password { get; set; }
 
-        [Required(ErrorMessage = "The field 'Phone number' is required")]
         public int PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "The field 'BankAccount' is required")]
@@ -37,6 +36,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         public string? BankAccount { get; set; }
 
         public string? Rol { get; set; } = "User";
-        public string? Token { get; set; }
+        public Byte[]? Image { get; set; }
     }
 }

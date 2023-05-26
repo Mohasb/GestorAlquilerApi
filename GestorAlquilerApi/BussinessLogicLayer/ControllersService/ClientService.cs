@@ -18,7 +18,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         private readonly IMapper _mapper;
         private readonly DbSet<Client> _clients;
         private readonly ISaveData<Client> _saveData;
-        private readonly IConfiguration _config;
 
         public ClientService(IQueryClient repository, IMapper mapper, ISaveData<Client> saveData)
         {
@@ -65,40 +64,62 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
         public async Task<IActionResult> EditElement(int id, ClientDTO clientDTO)
         {
-
-
-
-
-
+            //Obtener cliente antes de modificar
+            var clientBefore = _clients.AsNoTracking().FirstOrDefault(c => c.Id == id);
+            //Mapeo de el DTO al modelo
             var client = _mapper.Map<Client>(clientDTO);
+            //establecer el id del cliente con el id pasado por parámetro
             client.Id = id;
+            //El password encriptado se sobreescribe de lo recibido del front ("editedByBackend") por que es requerido en el DTO
+            client.Password = clientBefore!.Password;
 
-            string firstDigits = client.BankAccount!.Substring(0, client.BankAccount.Length - 4);
-            string asteriscos = new String('*', firstDigits.Length);
-            string lastFourDigits = client.BankAccount!.Substring(client.BankAccount.Length - 4);
-            client.BankAccount = asteriscos + lastFourDigits;
+            /*Si la contraseña no se ha modificado en el front puede ser que llegue aqui con los asteriscos(***********253) si es asi se obtiene la del clientBefore que no esta modificada. Si se modifica en el front no tendra * y por lo tanto no entrará y se actualizará*/
 
+            if (client.BankAccount!.Contains("*"))
+            {
+                client.BankAccount = clientBefore!.BankAccount;
+            }
+
+            //si el id psado no es igual al id del cliente
             if (id != client.Id)
             {
-                return BadRequest();
+                return new JsonResult(
+                    new { statusCode = (int)HttpStatusCode.BadRequest, isOk = false, }
+                );
             }
+
+
+            //GAdvierte que se ha modificado los datos del cliente
             _saveData.ModifiedState(client);
 
             try
             {
+                //Intenta guardar cambios
                 await _saveData.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
+                //Si el cliente no exist
                 if (!ClientExists(id))
                 {
-                    return NotFound();
+                    return new JsonResult(
+                        new { statusCode = (int)HttpStatusCode.NotFound, isOk = false, }
+                    );
                 }
                 else
                 {
-                    throw;
+                    return new JsonResult(
+                        new { statusCode = (int)HttpStatusCode.BadRequest, isOk = false, }
+                    );
                 }
             }
+
+
+            //Retorna al front un string modificado con ****** la cuenta bancária
+            string firstDigits = client.BankAccount!.Substring(0, client.BankAccount.Length - 4);
+            string asteriscos = new String('*', firstDigits.Length);
+            string lastFourDigits = client.BankAccount!.Substring(client.BankAccount.Length - 4);
+            client.BankAccount = asteriscos + lastFourDigits;
 
             return new JsonResult(
                 new

@@ -59,7 +59,8 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     lastName = _user.LastName,
                     phoneNumber = _user.PhoneNumber,
                     bankAccount = asteriscos + lastFourDigits,
-                    token = token
+                    token = token,
+                    image = _user.Image
                 };
                 return new JsonResult(
                     new

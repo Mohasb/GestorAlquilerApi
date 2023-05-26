@@ -41,7 +41,8 @@ namespace GestorAlquilerApi.DataAccessLayer.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     BankAccount = table.Column<string>(type: "TEXT", nullable: true),
-                    Rol = table.Column<string>(type: "TEXT", nullable: true)
+                    Rol = table.Column<string>(type: "TEXT", nullable: true),
+                    Image = table.Column<byte[]>(type: "BLOB", nullable: true)
                 },
                 constraints: table =>
                 {
