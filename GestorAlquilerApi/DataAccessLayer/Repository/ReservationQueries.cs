@@ -1,4 +1,5 @@
-﻿using GestorAlquilerApi.BussinessLogicLayer.Models;
+﻿using GestorAlquilerApi.BussinessLogicLayer.DTOs;
+using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Data;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -72,23 +73,24 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
             return data;
         }
 
-        public IQueryable<Reservation> GetDataReservationByClient(int id)
+        public IQueryable<ReservationClientDTO> GetDataReservationByClient(int id)
         {
+
             var data =
                 from r in _context.Reservation
-                where r.ClientId == id
-                from b in _context.Branch
-                where r.BranchId == b.Id
-                from rb in _context.Branch
-                where r.ReturnBranchId == b.Id
-
-                select new
+                join b in _context.Branch on r.BranchId equals b.Id
+                join rb in _context.Branch on r.ReturnBranchId equals rb.Id
+                where r.ClientId == id && r.StartDate >= DateTime.Now
+                select new ReservationClientDTO
                 {
-                    r,
-                    b.Name,
-                    returnBranch = rb.Name
+                    Id = r.Id,
+                    PickUpBranch = b.Name,
+                    StartDate = r.StartDate.ToString("MM/dd/yyyy"),
+                    ReturnBranch = rb.Name,
+                    EndDate = r.EndDate.ToString("MM/dd/yyyy"),
                 };
-            //Aqui obtener los nombre sde las sucursales tambien y solo mostrar las reservas del dia date now para adelante
+
+
             return data;
         }
     }

@@ -73,11 +73,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
                 new Client { Id = 2, Registration = "45223659F", Name = "Jhon", LastName = "Doe", Email = "jhon.doe@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("12345"), ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword("12345"), PhoneNumber = 695632458, BankAccount = "1234Bank", Rol = "User" },
                 new Client { Id = 3, Registration = "45369875G", Name = "Jane", LastName = "Doe", Email = "jane.doe@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("12345"), ConfirmationPassword = BCrypt.Net.BCrypt.HashPassword("12345"), PhoneNumber = 695632458, BankAccount = "1234Bank", Rol = "User" }
                 ); */
-
-
-
-
-
         }
     }
 }
