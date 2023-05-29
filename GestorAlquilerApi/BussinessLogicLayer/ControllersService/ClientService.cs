@@ -57,6 +57,14 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             {
                 return Problem($"There is no Client with id:{id}");
             }
+
+            string firstDigits = client!.BankAccount!.Substring(0, client.BankAccount.Length - 4);
+            string asteriscos = new String('*', firstDigits.Length);
+
+            string lastFourDigits = client.BankAccount!.Substring(client.BankAccount.Length - 4);
+
+            client.BankAccount = asteriscos + lastFourDigits;
+
             var clientDto = _mapper.Map<ClientDTO>(client);
 
             return clientDto;
@@ -88,7 +96,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                 );
             }
 
-
             //GAdvierte que se ha modificado los datos del cliente
             _saveData.ModifiedState(client);
 
@@ -113,7 +120,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     );
                 }
             }
-
 
             //Retorna al front un string modificado con ****** la cuenta bancária
             string firstDigits = client.BankAccount!.Substring(0, client.BankAccount.Length - 4);

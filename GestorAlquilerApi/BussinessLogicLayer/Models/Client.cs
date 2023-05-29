@@ -13,7 +13,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Models
         public int PhoneNumber { get; set; }
         public string? BankAccount { get; set; }
         public string? Rol { get; set; } = "User";
-        public Byte[]? Image { get; set; }
+        public string? Image { get; set; } = "";
 
         public virtual ICollection<Reservation>? Reservations { get; set; }
     }

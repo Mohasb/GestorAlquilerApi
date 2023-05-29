@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Metadata;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using System.Text;
 
 namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
@@ -36,6 +37,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         public string? BankAccount { get; set; }
 
         public string? Rol { get; set; } = "User";
-        public Byte[]? Image { get; set; }
+        public string? Image { get; set; } = "";
     }
 }
