@@ -75,7 +75,6 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
 
         public IQueryable<ReservationClientDTO> GetDataReservationByClient(int id)
         {
-
             var data =
                 from r in _context.Reservation
                 join b in _context.Branch on r.BranchId equals b.Id
@@ -85,11 +84,10 @@ namespace GestorAlquilerApi.DataAccessLayer.Repository
                 {
                     Id = r.Id,
                     PickUpBranch = b.Name,
-                    StartDate = r.StartDate.ToString("MM/dd/yyyy"),
+                    StartDate = r.StartDate.ToString("dd/MM/yyyy HH:mm"),
                     ReturnBranch = rb.Name,
-                    EndDate = r.EndDate.ToString("MM/dd/yyyy"),
+                    EndDate = r.EndDate.ToString("dd/MM/yyyy HH:mm"),
                 };
-
 
             return data;
         }

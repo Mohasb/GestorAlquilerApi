@@ -124,6 +124,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
 
             var reservation = _mapper.Map<Reservation>(reservationDTO);
 
+            //Add 2 hours GTM
+            reservation.StartDate = reservation.StartDate.AddHours(2);
+            reservation.EndDate = reservation.EndDate.AddHours(2);
+            //Get times
+            string pickupTime = reservation.StartDate.ToString("HH:mm");
+            string returnTime = reservation.EndDate.ToString("HH:mm");
+
+            reservation.StartDate = DateTime.Parse(reservation.StartDate.ToString("yyyy-MM-dd"));
+            reservation.EndDate = DateTime.Parse(reservation.EndDate.ToString("yyyy-MM-dd"));
+
             //Validate DTO
             var valuesAsArray = Enum.GetNames(typeof(Car.Categories));
             if (!valuesAsArray.Contains(reservation.CarCategory))
@@ -162,6 +172,16 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
                     try
                     {
                         RemoveCarFromAvailable(reservation, "remove");
+
+                        //Añadir la fecha
+                        string startDateTime =
+                            reservation.StartDate.ToString("yyyy-MM-dd") + " " + pickupTime;
+                        string endDateTime =
+                            reservation.EndDate.ToString("yyyy-MM-dd") + " " + returnTime;
+
+                        reservation.StartDate = DateTime.Parse(startDateTime);
+                        reservation.EndDate = DateTime.Parse(endDateTime);
+
                         _repository.AddReservation(reservation);
                         await _saveData.SaveChangesAsync();
                         return reservationDTO;
