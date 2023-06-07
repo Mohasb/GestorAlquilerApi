@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using GestorAlquilerApi.DataAccessLayer.Interfaces;
@@ -202,18 +203,39 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
         {
             if (_reservations == null)
             {
-                return NotFound();
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.NotFound,
+                        isOk = false,
+                        responseText = "There are no table reservations"
+                    }
+                );
             }
             var reservation = await _reservations.FindAsync(id);
             if (reservation == null)
             {
-                return NotFound();
+                return new JsonResult(
+                    new
+                    {
+                        statusCode = (int)HttpStatusCode.NotFound,
+                        isOk = false,
+                        responseText = "There are no reservations/" + id
+                    }
+                );
             }
             RemoveCarFromAvailable(reservation, "add");
             _reservations.Remove(reservation);
             await _saveData.SaveChangesAsync();
 
-            return NoContent();
+            return new JsonResult(
+                new
+                {
+                    statusCode = (int)HttpStatusCode.OK,
+                    isOk = true,
+                    id
+                }
+            );
         }
 
         private bool ReservationExists(int id)
