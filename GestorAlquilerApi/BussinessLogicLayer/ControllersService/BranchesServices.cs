@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
@@ -119,7 +120,15 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
-            return CreatedAtAction("GetBranch", new { id = branch.Id }, branch);
+            /* return CreatedAtAction("GetBranch", new { id = branch.Id }, branch); */
+            return new JsonResult(
+                new
+                {
+                    statusCode = (int)HttpStatusCode.OK,
+                    isOk = true,
+                    id = branch.Id
+                }
+            );
         }
 
         public async Task<IActionResult> RemoveElement(int id)
