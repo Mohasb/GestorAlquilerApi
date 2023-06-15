@@ -12,10 +12,10 @@
 
         public enum Prices
         {
-            A = 280,
-            B = 260,
-            C = 250,
-            D = 220,
+            A = 55,
+            B = 45,
+            C = 35,
+            D = 35,
         }
 
         public int Id { get; set; }
