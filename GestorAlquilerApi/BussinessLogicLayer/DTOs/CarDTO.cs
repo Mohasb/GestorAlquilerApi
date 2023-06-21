@@ -5,7 +5,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
 {
     public class CarDTO
     {
-        //[JsonIgnore]
         [Required(ErrorMessage = "The field 'Id' is required")]
         public int Id { get; set; }
 
@@ -29,8 +28,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.DTOs
         [MaxLength(100)]
         public string? GearShiftType { get; set; }
 
-        [Required(ErrorMessage = "The field 'Image' is required")]
-        [MaxLength(100)]
         public string? Image { get; set; }
 
         [Required(ErrorMessage = "The field 'Category' is required")]
