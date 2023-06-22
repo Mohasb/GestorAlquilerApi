@@ -13,6 +13,7 @@ namespace GestorAlquilerApi.DataAccessLayer.Data
         public DbSet<Branch> Branch { get; set; } = default!;
 
         public DbSet<Car> Car { get; set; } = default!;
+        public DbSet<CarStore> CarStore { get; set; } = default!;
 
         public DbSet<Client> Client { get; set; } = default!;
 
