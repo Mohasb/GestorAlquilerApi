@@ -88,5 +88,11 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
             var reservation = _customService.GetReservationByClient(id);
             return reservation;
         }
+
+        [HttpPut("updatePwd/{id}")]
+        public IActionResult updateUserPwd(ClientDTO client, int id)
+        {
+            return _customService.updatePwd(client, id);
+        }
     }
 }
