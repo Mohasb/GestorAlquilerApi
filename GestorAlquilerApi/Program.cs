@@ -11,29 +11,26 @@ using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using System.Reflection;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
+
     options.AddPolicy(
         name: MyAllowSpecificOrigins,
         policy =>
         {
             policy
-                .WithOrigins(
-                    //Dev
-                    "http://localhost:5173",
-                    "http://127.0.0.1:5173",
-                    //Build
-                    "http://localhost:4173",
-                    "http://127.0.0.1:4173"
-                )
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            .WithOrigins("*") // Agrega el dominio del frontend
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
         }
     );
+
+
 });
 
 //////////// Add services to the container.//////////////////
@@ -168,10 +165,33 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.Use((context, next) =>
+{
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "*"); 
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = StatusCodes.Status200OK;
+        return context.Response.WriteAsync("OK");
+    }
+
+    return next();
+});
+
+
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 
