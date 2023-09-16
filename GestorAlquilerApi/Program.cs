@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-            .WithOrigins("*") // Agrega el dominio del frontend
+            .WithOrigins("http://mhcars.daw")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         }
