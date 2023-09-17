@@ -23,8 +23,10 @@ builder.Services.AddCors(options =>
         name: MyAllowSpecificOrigins,
         policy =>
         {
+            //domain name and ip for phone because phone doesnt have domain
             policy
-            .WithOrigins("http://mhcars.daw")
+            /* .WithOrigins("http://mhcars.daw", "192.168.1.40") */
+            .AllowAnyOrigin()
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         }
@@ -176,7 +178,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.Use((context, next) =>
 {
-    context.Response.Headers.Add("Access-Control-Allow-Origin", "*"); 
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
     context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
 
