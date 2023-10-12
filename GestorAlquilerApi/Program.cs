@@ -11,29 +11,11 @@ using GestorAlquilerApi.DataAccessLayer.Interfaces;
 using GestorAlquilerApi.BussinessLogicLayer.DTOs;
 using GestorAlquilerApi.BussinessLogicLayer.Models;
 using System.Reflection;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors(options =>
-{ 
 
-    options.AddPolicy(
-        name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            //domain name and ip for phone because phone doesnt have domain
-            policy
-            /* .WithOrigins("http://mhcars.daw", "192.168.1.40") */
-            .AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        }
-    );
-
-
-});
 
 //////////// Add services to the container.//////////////////
 
@@ -85,6 +67,26 @@ builder.Services.AddDbContext<ApiContext>(
 
 builder.Services.AddControllers();
 
+//Cors
+builder.Services.AddCors(options =>
+{
+
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            //domain name and ip for phone because phone doesnt have domain
+            policy
+            /*.WithOrigins("http://mhcars.daw", "192.168.1.40", "10.2.249.179")*/
+            .AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        }
+    );
+
+
+});
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -133,7 +135,7 @@ builder.Services.AddSwaggerGen(options =>
                         Id = "Bearer"
                     }
                 },
-                new string[] { }
+                Array.Empty<string>()
             }
         }
     );
@@ -165,35 +167,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-
-if (!app.Environment.IsDevelopment())
+}else
 {
     app.UseHttpsRedirection();
 }
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
 
-app.Use((context, next) =>
-{
-    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.StatusCode = StatusCodes.Status200OK;
-        return context.Response.WriteAsync("OK");
-    }
-
-    return next();
-});
-
-
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

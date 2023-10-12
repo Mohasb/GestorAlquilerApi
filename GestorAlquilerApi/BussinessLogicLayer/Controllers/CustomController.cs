@@ -41,7 +41,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         /// <response code="200">Returns the confirmation</response>
         /// <response code="400">If there are no user with that email</response>
         [HttpPut("setAdmin/{email}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetAdmin(string email) =>
             await _setUserAdminService.EditUserRol(email);
 
@@ -62,6 +62,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         /// Returns a Cars of a branch by its id
         /// </summary>
         [HttpGet("carsByBranch/{branchId}")]
+        [Authorize(Roles = "Admin")]
         public List<CarDTO> GetCarsByBranch(int branchId)
         {
             return _customService.GetCarsByBranch(branchId);
