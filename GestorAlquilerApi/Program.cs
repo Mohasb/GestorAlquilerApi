@@ -67,26 +67,6 @@ builder.Services.AddDbContext<ApiContext>(
 
 builder.Services.AddControllers();
 
-//Cors
-builder.Services.AddCors(options =>
-{
-
-    options.AddPolicy(
-        name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            //domain name and ip for phone because phone doesnt have domain
-            policy
-            /*.WithOrigins("http://mhcars.daw", "192.168.1.40", "10.2.249.179")*/
-            .AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        }
-    );
-
-
-});
-
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -159,6 +139,25 @@ builder.Services
         };
     });
 
+//Cors
+builder.Services.AddCors(options =>
+{
+
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            //domain name and ip for phone because phone doesnt have domain
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+
+
+});
+
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 
@@ -167,7 +166,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}else
+}
+else
 {
     app.UseHttpsRedirection();
 }

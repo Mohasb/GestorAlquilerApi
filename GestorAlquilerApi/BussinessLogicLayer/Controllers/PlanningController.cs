@@ -14,7 +14,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         {
             _planningService = planningService;
         }
-/* 
+
         /// <summary>
         /// Returns a List of all Planning
         /// </summary>
@@ -39,7 +39,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<PlanningDTO>> GetPlanning(int id) =>
-            await _planningService.GetElementById(id); 
+            await _planningService.GetElementById(id);
 
         /// <summary>
         /// Edit a Planning by its Id
@@ -49,7 +49,7 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpPut("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutPlanning(int id, PlanningDTO planningDTO) =>
-            await _planningService.EditElement(id, planningDTO); 
+            await _planningService.EditElement(id, planningDTO);
 
         /// <summary>
         /// When added a branch 365 days with all cars categories is added.Normaly i dont use this endpoint because is managed by post Branches, cars and registrations.
@@ -67,6 +67,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.Controllers
         [HttpDelete("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePlanning(int id) =>
-            await _planningService.RemoveElement(id);  */
+            await _planningService.RemoveElement(id);
     }
 }

@@ -120,7 +120,6 @@ namespace GestorAlquilerApi.BussinessLogicLayer.ControllersService
             //Here is added all the planning from this branch(365 days for categories(Car))
             AddPlanningBranch(branch);
 
-            /* return CreatedAtAction("GetBranch", new { id = branch.Id }, branch); */
             return new JsonResult(
                 new
                 {
